@@ -101,20 +101,30 @@
       border-radius: 14px;
       padding: 20px;
     }
-    .dots {
+    .tabs {
       display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 4px;
+      margin-bottom: 10px;
     }
-    .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: #2d3348;
-      transition: background 0.2s, transform 0.2s;
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 7px 4px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #64748b;
+      background: #161b27;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      user-select: none;
     }
-    .dot.active { background: #60a5fa; transform: scale(1.3); }
+    .tab.active {
+      background: #1e2330;
+      color: #f1f5f9;
+      border-color: #60a5fa;
+    }
 
     /* SLIDE 1 — STATUS */
     .status-top {
@@ -374,13 +384,13 @@ function chartColorRHR(v) { return COLOR[cRHR(v)]; }
 // Karuzel dots
 function initCarousel() {
   const carousel = document.getElementById('carousel');
-  const dotsEl = document.querySelectorAll('.dot');
+  const tabsEl = document.querySelectorAll('.tab');
   if (!carousel) return;
   carousel.addEventListener('scroll', () => {
     const idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
-    dotsEl.forEach((d,i) => d.classList.toggle('active', i===idx));
+    tabsEl.forEach((t,i) => t.classList.toggle('active', i===idx));
   }, { passive: true });
-  dotsEl.forEach((d,i) => d.addEventListener('click', () => {
+  tabsEl.forEach((t,i) => t.addEventListener('click', () => {
     carousel.scrollTo({ left: i * carousel.offsetWidth, behavior: 'smooth' });
   }));
 }
@@ -409,6 +419,11 @@ function renderPage(data) {
 
     <!-- KARUZELA -->
     <div class="carousel-wrap">
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-i="0">Status</div>
+        <div class="tab" data-i="1">7 dni</div>
+        <div class="tab" data-i="2">Tabela</div>
+      </div>
       <div class="carousel" id="carousel">
 
         <!-- Slide 1: Status -->
@@ -482,11 +497,6 @@ function renderPage(data) {
           </table>
         </div>
 
-      </div>
-      <div class="dots">
-        <div class="dot active" data-i="0"></div>
-        <div class="dot" data-i="1"></div>
-        <div class="dot" data-i="2"></div>
       </div>
     </div>
 
