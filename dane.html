@@ -13,8 +13,29 @@
       background: #0f1117;
       color: #e2e8f0;
       min-height: 100vh;
-      padding: 24px 16px;
+      padding: 0 16px 24px;
     }
+
+    .topnav {
+      display: flex;
+      gap: 4px;
+      padding: 12px 0;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #2d3348;
+    }
+
+    .topnav a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .topnav a:hover { background: #1e2330; color: #f1f5f9; }
+    .topnav a.active { background: #1e2330; color: #f1f5f9; }
 
     h1 {
       font-size: 1.4rem;
@@ -121,6 +142,12 @@
   </style>
 </head>
 <body>
+
+<nav class="topnav">
+  <a href="/">🏠 Hub</a>
+  <a href="/dane.html" class="active">📊 Dane</a>
+  <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
+</nav>
 
 <h1>Dane Garmin</h1>
 <div class="meta" id="meta">Ładowanie...</div>
