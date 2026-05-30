@@ -13,17 +13,20 @@
       background: #0f1117;
       color: #e2e8f0;
       min-height: 100vh;
-      padding: 0 16px 24px;
+      padding: 0 0 40px;
     }
 
+    /* NAV */
     .topnav {
       display: flex;
       gap: 4px;
-      padding: 12px 0;
-      margin-bottom: 20px;
+      padding: 12px 16px;
       border-bottom: 1px solid #2d3348;
+      background: #0f1117;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
     .topnav a {
       text-decoration: none;
       font-size: 0.82rem;
@@ -33,112 +36,249 @@
       border-radius: 8px;
       transition: background 0.15s, color 0.15s;
     }
-
     .topnav a:hover { background: #1e2330; color: #f1f5f9; }
     .topnav a.active { background: #1e2330; color: #f1f5f9; }
-
-    h1 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #f8fafc;
-      margin-bottom: 4px;
+    .topnav .spacer { flex: 1; }
+    .refresh-btn {
+      background: none;
+      border: 1px solid #2d3348;
+      color: #94a3b8;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+    .refresh-btn:hover { background: #1e2330; color: #f1f5f9; border-color: #3d4562; }
+    .refresh-btn.loading { opacity: 0.5; cursor: not-allowed; }
+    .refresh-btn .spin { display: inline-block; }
+    .refresh-btn.loading .spin { animation: spin 1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
-    .meta {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-bottom: 24px;
-    }
+    /* LAYOUT */
+    .page { max-width: 520px; margin: 0 auto; padding: 20px 16px 0; }
 
     .section-title {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #64748b;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .card {
       background: #1e2330;
       border: 1px solid #2d3348;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
+    /* KARUZELA */
+    .carousel-wrap {
+      position: relative;
+      margin-bottom: 16px;
     }
+    .carousel {
+      display: flex;
+      overflow-x: scroll;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .carousel::-webkit-scrollbar { display: none; }
+    .carousel-slide {
+      scroll-snap-align: start;
+      flex: 0 0 100%;
+      background: #1e2330;
+      border: 1px solid #2d3348;
+      border-radius: 14px;
+      padding: 20px;
+    }
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #2d3348;
+      transition: background 0.2s, transform 0.2s;
+      cursor: pointer;
+    }
+    .dot.active { background: #60a5fa; transform: scale(1.3); }
 
-    th {
-      text-align: left;
-      font-size: 0.72rem;
-      font-weight: 600;
+    /* SLIDE 1 — STATUS */
+    .status-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .status-emoji { font-size: 3rem; line-height: 1; }
+    .status-text .label {
+      font-size: 0.75rem;
+      color: #64748b;
       text-transform: uppercase;
       letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+    .status-text .value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+    .status-comment {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .metrics-pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .pill {
+      background: #161b27;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .pill .p-label { font-size: 0.7rem; color: #64748b; }
+    .pill .p-value { font-size: 1rem; font-weight: 600; }
+    .pill.green .p-value { color: #4ade80; }
+    .pill.yellow .p-value { color: #facc15; }
+    .pill.red .p-value { color: #f87171; }
+    .pill.dim .p-value { color: #475569; }
+
+    /* SLIDE 2 — 7 DNI */
+    .week-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .week-table th {
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: #64748b;
-      padding: 0 8px 10px 8px;
+      padding: 0 6px 8px 0;
+    }
+    .week-table td {
+      padding: 7px 6px 7px 0;
+      border-top: 1px solid #2d3348;
+      color: #cbd5e1;
+      vertical-align: middle;
+    }
+    .week-table tr:first-child td { border-top: none; }
+    .wt-green { color: #4ade80; }
+    .wt-yellow { color: #facc15; }
+    .wt-red { color: #f87171; }
+    .wt-dim { color: #475569; }
+    .training-badge {
+      display: inline-block;
+      font-size: 0.9rem;
     }
 
-    td {
-      padding: 8px;
+    /* SLIDE 3 — TABELA ZDROWIA */
+    .health-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .health-table th {
+      text-align: left;
+      font-size: 0.68rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      padding: 0 6px 8px 6px;
+    }
+    .health-table td {
+      padding: 8px 6px;
       border-top: 1px solid #2d3348;
       color: #cbd5e1;
     }
+    .health-table tr:first-child td { border-top: none; }
+    td.g { color: #4ade80; }
+    td.y { color: #facc15; }
+    td.r { color: #f87171; }
+    td.d { color: #475569; }
 
-    tr:first-child td { border-top: none; }
-
-    td.good { color: #4ade80; }
-    td.warn { color: #facc15; }
-    td.bad  { color: #f87171; }
-    td.dim  { color: #475569; }
-
-    .chart-wrap {
-      position: relative;
-      height: 200px;
+    /* TRENINGI */
+    .trening-item {
+      border-top: 1px solid #2d3348;
+      padding: 12px 0;
     }
-
-    .treningi-list {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .trening-row {
+    .trening-item:first-child { border-top: none; padding-top: 0; }
+    .trening-header {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .trening-icon { font-size: 1.3rem; width: 28px; text-align: center; }
+    .trening-main { flex: 1; }
+    .trening-main .typ { font-weight: 600; font-size: 0.88rem; color: #f1f5f9; }
+    .trening-main .sub { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+    .trening-right { text-align: right; font-size: 0.75rem; color: #64748b; }
+    .expand-arrow {
+      font-size: 0.8rem;
+      color: #475569;
+      transition: transform 0.2s;
+    }
+    .trening-item.open .expand-arrow { transform: rotate(180deg); }
+    .trening-details {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
       background: #161b27;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      border-radius: 10px;
+      gap: 8px;
     }
+    .trening-item.open .trening-details { display: grid; grid-template-columns: 1fr 1fr; }
+    .detail-item .d-label { font-size: 0.68rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+    .detail-item .d-value { font-size: 0.9rem; color: #e2e8f0; font-weight: 500; margin-top: 2px; }
 
-    .trening-icon {
-      font-size: 1.2rem;
-      width: 28px;
-      text-align: center;
-    }
+    /* WYKRES */
+    .chart-wrap { position: relative; height: 200px; }
 
-    .trening-info { flex: 1; }
-    .trening-info .typ { font-weight: 600; color: #f1f5f9; font-size: 0.82rem; }
-    .trening-info .sub { color: #64748b; font-size: 0.75rem; margin-top: 2px; }
+    /* META */
+    .meta { font-size: 0.75rem; color: #475569; margin-bottom: 20px; }
 
-    .trening-stats {
-      text-align: right;
-      font-size: 0.78rem;
+    .loading { color: #64748b; text-align: center; padding: 40px; font-size: 0.9rem; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: #1e2330;
+      border: 1px solid #2d3348;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 0.82rem;
       color: #94a3b8;
+      transition: transform 0.3s;
+      z-index: 999;
     }
-
-    .loading { color: #64748b; text-align: center; padding: 40px; }
-    .error { color: #f87171; text-align: center; padding: 40px; font-size: 0.9rem; }
-
-    @media (max-width: 480px) {
-      th:nth-child(n+5), td:nth-child(n+5) { display: none; }
-    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
   </style>
 </head>
 <body>
@@ -147,106 +287,266 @@
   <a href="/">🏠 Hub</a>
   <a href="/dane.html" class="active">📊 Dane</a>
   <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
+  <div class="spacer"></div>
+  <button class="refresh-btn" id="refreshBtn" onclick="triggerRefresh()">
+    <span class="spin">↻</span> Odśwież
+  </button>
 </nav>
 
-<h1>Dane Garmin</h1>
-<div class="meta" id="meta">Ładowanie...</div>
-
-<div class="card">
-  <div class="section-title">Zdrowie — ostatnie dni</div>
-  <div id="zdrowie-wrap"><div class="loading">Ładowanie...</div></div>
+<div class="page" id="page">
+  <div class="loading">Ładowanie danych…</div>
 </div>
 
-<div class="card">
-  <div class="section-title">HRV & RHR (ms / uderzenia/min)</div>
-  <div class="chart-wrap">
-    <canvas id="chart"></canvas>
-  </div>
-</div>
-
-<div class="card">
-  <div class="section-title">Ostatnie treningi</div>
-  <div id="treningi-wrap"><div class="loading">Ładowanie...</div></div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-const API = 'https://n8n.nzr-hub.uk/webhook/dane';
+const API   = 'https://n8n.nzr-hub.uk/webhook/dane';
+const REFRESH = 'https://n8n.nzr-hub.uk/webhook/refresh';
 
-const ICONS = {
-  running: '🏃',
-  strength_training: '💪',
-  yoga: '🧘',
-  cycling: '🚴',
-  swimming: '🏊',
+// Progi dopasowane do danych użytkownika
+const T = {
+  hrv:  { green: 82, yellow: 72 },   // ≥82 zielony, 72-81 żółty, <72 czerwony
+  rhr:  { green: 51, yellow: 54 },   // ≤51 zielony, 52-54 żółty, ≥55 czerwony
+  sen:  { green: 7,  yellow: 6  },   // ≥7 zielony, 6-6.9 żółty, <6 czerwony
+  bb:   { green: 80, yellow: 60 },   // ≥80 zielony, 60-79 żółty, <60 czerwony
 };
 
-function icon(typ) {
-  return ICONS[typ] || '🏋️';
-}
+const ICONS = { running:'🏃', strength_training:'💪', yoga:'🧘', cycling:'🚴', swimming:'🏊' };
+const TYPY  = { running:'Bieganie', strength_training:'Siłownia', yoga:'Joga', cycling:'Rower', swimming:'Pływanie' };
 
-function hrv_class(v) {
+function icon(t) { return ICONS[t] || '🏋️'; }
+function typ(t)  { return TYPY[t]  || t; }
+
+// Klasy kolorów
+function cHRV(v) {
   if (v === null) return 'dim';
-  if (v >= 75) return 'good';
-  if (v >= 55) return '';
-  return 'bad';
+  return v >= T.hrv.green ? 'green' : v >= T.hrv.yellow ? 'yellow' : 'red';
 }
-
-function bb_class(v) {
+function cRHR(v) {
   if (v === null) return 'dim';
-  if (v >= 70) return 'good';
-  if (v >= 40) return 'warn';
-  return 'bad';
+  return v <= T.rhr.green ? 'green' : v <= T.rhr.yellow ? 'yellow' : 'red';
 }
-
-function sen_class(v) {
+function cSen(v) {
   if (v === null) return 'dim';
-  if (v >= 7) return 'good';
-  if (v >= 6) return 'warn';
-  return 'bad';
+  return v >= T.sen.green ? 'green' : v >= T.sen.yellow ? 'yellow' : 'red';
+}
+function cBB(v) {
+  if (v === null) return 'dim';
+  return v >= T.bb.green ? 'green' : v >= T.bb.yellow ? 'yellow' : 'red';
 }
 
-function fmt(v, suffix = '', decimals = 0) {
+// Punkty (0=czerwony, 1=żółty, 2=zielony)
+function scoreHRV(v) { if(!v) return null; return v>=T.hrv.green?2:v>=T.hrv.yellow?1:0; }
+function scoreRHR(v) { if(!v) return null; return v<=T.rhr.green?2:v<=T.rhr.yellow?1:0; }
+function scoreSen(v) { if(!v) return null; return v>=T.sen.green?2:v>=T.sen.yellow?1:0; }
+function scoreBB(v)  { if(!v) return null; return v>=T.bb.green?2:v>=T.bb.yellow?1:0; }
+
+function statusInfo(score) {
+  if (score >= 7) return { emoji:'🟢', label:'Gotowy na ciężki wysiłek', color:'#4ade80' };
+  if (score >= 5) return { emoji:'🟡', label:'Umiarkowana gotowość', color:'#facc15' };
+  if (score >= 3) return { emoji:'🟠', label:'Oszczędzaj energię', color:'#fb923c' };
+  return            { emoji:'🔴', label:'Regeneracja priorytetem', color:'#f87171' };
+}
+
+function statusComment(score, d) {
+  const parts = [];
+  if (d.hrv !== null && d.hrv < T.hrv.yellow) parts.push(`HRV na poziomie ${d.hrv} — poniżej Twojej normy`);
+  if (d.rhr !== null && d.rhr > T.rhr.yellow) parts.push(`RHR podwyższone (${d.rhr} bpm)`);
+  if (d.sen_godz !== null && d.sen_godz < T.sen.yellow) parts.push(`Krótki sen (${d.sen_godz}h)`);
+  if (d.bb_max !== null && d.bb_max < T.bb.yellow) parts.push(`Niskie Body Battery (${d.bb_max})`);
+  if (parts.length === 0) {
+    if (score >= 7) return 'Wszystkie wskaźniki w normie. Dobry moment na mocniejszy trening.';
+    return 'Parametry w porządku — trenuj zgodnie z planem.';
+  }
+  return parts.join('. ') + '.';
+}
+
+function fmt(v, suf='', dec=0) {
   if (v === null || v === undefined) return '<span style="color:#475569">—</span>';
-  return (decimals ? v.toFixed(decimals) : v) + suffix;
+  return (dec ? (+v).toFixed(dec) : v) + suf;
 }
 
-function renderZdrowie(rows) {
-  const sorted = [...rows].sort((a, b) => b.data.localeCompare(a.data)).slice(0, 7);
-  const html = `
-    <table>
-      <thead>
-        <tr>
-          <th>Data</th>
-          <th>HRV</th>
-          <th>RHR</th>
-          <th>BB max</th>
-          <th>Sen h</th>
-          <th>Jakość</th>
-          <th>Kroki</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${sorted.map(r => `
-          <tr>
-            <td>${r.data.slice(5)}</td>
-            <td class="${hrv_class(r.hrv)}">${fmt(r.hrv)}</td>
-            <td>${fmt(r.rhr)}</td>
-            <td class="${bb_class(r.bb_max)}">${fmt(r.bb_max)}</td>
-            <td class="${sen_class(r.sen_godz)}">${fmt(r.sen_godz, 'h', 1)}</td>
-            <td>${fmt(r.jakosc_snu)}</td>
-            <td>${r.kroki ? r.kroki.toLocaleString('pl') : '<span style="color:#475569">—</span>'}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>`;
-  document.getElementById('zdrowie-wrap').innerHTML = html;
+// Kolory dla wykresu
+const COLOR = { green:'#4ade80', yellow:'#facc15', red:'#f87171', dim:'#475569' };
+function chartColorHRV(v) { return COLOR[cHRV(v)]; }
+function chartColorRHR(v) { return COLOR[cRHR(v)]; }
+
+// Karuzel dots
+function initCarousel() {
+  const carousel = document.getElementById('carousel');
+  const dotsEl = document.querySelectorAll('.dot');
+  if (!carousel) return;
+  carousel.addEventListener('scroll', () => {
+    const idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+    dotsEl.forEach((d,i) => d.classList.toggle('active', i===idx));
+  }, { passive: true });
+  dotsEl.forEach((d,i) => d.addEventListener('click', () => {
+    carousel.scrollTo({ left: i * carousel.offsetWidth, behavior: 'smooth' });
+  }));
 }
 
-function renderChart(rows) {
-  const sorted = [...rows].sort((a, b) => a.data.localeCompare(b.data));
-  const labels = sorted.map(r => r.data.slice(5));
-  const hrv = sorted.map(r => r.hrv);
-  const rhr = sorted.map(r => r.rhr);
+function renderPage(data) {
+  const zdrowie  = [...data.zdrowie].sort((a,b)=>b.data.localeCompare(a.data));
+  const treningi = [...data.treningi].sort((a,b)=>b.data.localeCompare(a.data));
+  const latest   = zdrowie[0];
+  const last7    = zdrowie.slice(0,7);
+
+  // Status
+  const scores = [scoreHRV(latest.hrv), scoreRHR(latest.rhr), scoreSen(latest.sen_godz), scoreBB(latest.bb_max)].filter(x=>x!==null);
+  const totalScore = scores.reduce((a,b)=>a+b,0);
+  const maxScore   = scores.length * 2;
+  const normScore  = maxScore > 0 ? Math.round(totalScore / maxScore * 8) : 0;
+  const si = statusInfo(normScore);
+
+  // Treningi na mapę dat
+  const trainingByDate = {};
+  treningi.forEach(t => {
+    trainingByDate[t.data] = (trainingByDate[t.data]||[]).concat(icon(t.typ));
+  });
+
+  document.getElementById('page').innerHTML = `
+    <p class="meta">Ostatnia aktualizacja: ${data.ostatnia_aktualizacja}</p>
+
+    <!-- KARUZELA -->
+    <div class="carousel-wrap">
+      <div class="carousel" id="carousel">
+
+        <!-- Slide 1: Status -->
+        <div class="carousel-slide">
+          <div class="section-title">Status dziś</div>
+          <div class="status-top">
+            <div class="status-emoji">${si.emoji}</div>
+            <div class="status-text">
+              <div class="label">Gotowość</div>
+              <div class="value" style="color:${si.color}">${si.label}</div>
+            </div>
+          </div>
+          <p class="status-comment">${statusComment(normScore, latest)}</p>
+          <div class="metrics-pills">
+            <div class="pill ${cHRV(latest.hrv)}">
+              <span class="p-label">HRV</span>
+              <span class="p-value">${latest.hrv ?? '—'}</span>
+            </div>
+            <div class="pill ${cRHR(latest.rhr)}">
+              <span class="p-label">RHR</span>
+              <span class="p-value">${latest.rhr ?? '—'} bpm</span>
+            </div>
+            <div class="pill ${cSen(latest.sen_godz)}">
+              <span class="p-label">Sen</span>
+              <span class="p-value">${latest.sen_godz ? latest.sen_godz.toFixed(1)+'h' : '—'}</span>
+            </div>
+            <div class="pill ${cBB(latest.bb_max)}">
+              <span class="p-label">Body Battery</span>
+              <span class="p-value">${latest.bb_max ?? '—'}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 2: 7 dni -->
+        <div class="carousel-slide">
+          <div class="section-title">Ostatnie 7 dni</div>
+          <table class="week-table">
+            <thead><tr>
+              <th>Data</th><th>HRV</th><th>RHR</th><th>Sen</th><th>BB</th><th>Trening</th>
+            </tr></thead>
+            <tbody>
+              ${last7.map(r=>`<tr>
+                <td>${r.data.slice(5)}</td>
+                <td class="wt-${cHRV(r.hrv)}">${r.hrv??'—'}</td>
+                <td class="wt-${cRHR(r.rhr)}">${r.rhr??'—'}</td>
+                <td class="wt-${cSen(r.sen_godz)}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
+                <td class="wt-${cBB(r.bb_max)}">${r.bb_max??'—'}</td>
+                <td>${(trainingByDate[r.data]||[]).join('')||'<span style="color:#2d3348">·</span>'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Slide 3: Pełna tabela -->
+        <div class="carousel-slide">
+          <div class="section-title">Dane zdrowotne</div>
+          <table class="health-table">
+            <thead><tr>
+              <th>Data</th><th>HRV</th><th>RHR</th><th>BB</th><th>Sen</th><th>Jakość</th>
+            </tr></thead>
+            <tbody>
+              ${zdrowie.map(r=>`<tr>
+                <td>${r.data.slice(5)}</td>
+                <td class="${cHRV(r.hrv)[0]}">${r.hrv??'—'}</td>
+                <td class="${cRHR(r.rhr)[0]}">${r.rhr??'—'}</td>
+                <td class="${cBB(r.bb_max)[0]}">${r.bb_max??'—'}</td>
+                <td class="${cSen(r.sen_godz)[0]}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
+                <td>${r.jakosc_snu??'—'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+      <div class="dots">
+        <div class="dot active" data-i="0"></div>
+        <div class="dot" data-i="1"></div>
+        <div class="dot" data-i="2"></div>
+      </div>
+    </div>
+
+    <!-- TRENINGI -->
+    <div class="card">
+      <div class="section-title">Treningi</div>
+      <div id="treningi-list">
+        ${treningi.map((t,i)=>{
+          const details = [
+            t.dystans_km ? `<div class="detail-item"><div class="d-label">Dystans</div><div class="d-value">${t.dystans_km} km</div></div>` : '',
+            t.czas_min   ? `<div class="detail-item"><div class="d-label">Czas</div><div class="d-value">${Math.round(t.czas_min)} min</div></div>` : '',
+            t.tempo      ? `<div class="detail-item"><div class="d-label">Tempo</div><div class="d-value">${t.tempo}/km</div></div>` : '',
+            t.hr_avg     ? `<div class="detail-item"><div class="d-label">HR avg</div><div class="d-value">${t.hr_avg} bpm</div></div>` : '',
+            t.hr_max     ? `<div class="detail-item"><div class="d-label">HR max</div><div class="d-value">${t.hr_max} bpm</div></div>` : '',
+            t.z2_pct     ? `<div class="detail-item"><div class="d-label">Strefa 2</div><div class="d-value">${t.z2_pct}%</div></div>` : '',
+            t.z3_pct     ? `<div class="detail-item"><div class="d-label">Strefa 3</div><div class="d-value">${t.z3_pct}%</div></div>` : '',
+            t.vo2max     ? `<div class="detail-item"><div class="d-label">VO2max est.</div><div class="d-value">${(t.vo2max/10).toFixed(1)}</div></div>` : '',
+          ].filter(Boolean).join('');
+          const summary = [
+            t.dystans_km ? t.dystans_km+'km' : null,
+            t.czas_min   ? Math.round(t.czas_min)+'min' : null,
+            t.tempo      ? t.tempo+'/km' : null,
+          ].filter(Boolean).join(' · ');
+          return `
+          <div class="trening-item" id="tr-${i}">
+            <div class="trening-header" onclick="toggleTrening(${i})">
+              <div class="trening-icon">${icon(t.typ)}</div>
+              <div class="trening-main">
+                <div class="typ">${typ(t.typ)}</div>
+                <div class="sub">${summary || 'brak danych'}</div>
+              </div>
+              <div class="trening-right">${t.data.slice(5)}</div>
+              <div class="expand-arrow">▾</div>
+            </div>
+            <div class="trening-details">${details}</div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+
+    <!-- WYKRES -->
+    <div class="card">
+      <div class="section-title">HRV & RHR — trend</div>
+      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+    </div>
+  `;
+
+  initCarousel();
+  renderChart(zdrowie);
+}
+
+function toggleTrening(i) {
+  document.getElementById('tr-'+i).classList.toggle('open');
+}
+
+function renderChart(zdrowie) {
+  const sorted = [...zdrowie].sort((a,b)=>a.data.localeCompare(b.data));
+  const labels = sorted.map(r=>r.data.slice(5));
+  const hrv    = sorted.map(r=>r.hrv);
+  const rhr    = sorted.map(r=>r.rhr);
 
   new Chart(document.getElementById('chart'), {
     type: 'line',
@@ -257,19 +557,35 @@ function renderChart(rows) {
           label: 'HRV',
           data: hrv,
           borderColor: '#4ade80',
-          backgroundColor: 'rgba(74,222,128,0.08)',
+          backgroundColor: 'rgba(74,222,128,0.06)',
           tension: 0.3,
           spanGaps: true,
-          pointRadius: 4,
+          pointRadius: 5,
+          pointBackgroundColor: hrv.map(v => COLOR[cHRV(v)]),
+          pointBorderColor: hrv.map(v => COLOR[cHRV(v)]),
+          segment: {
+            borderColor: ctx => {
+              const v = hrv[ctx.p1DataIndex];
+              return COLOR[cHRV(v)] || '#4ade80';
+            }
+          },
         },
         {
           label: 'RHR',
           data: rhr,
           borderColor: '#60a5fa',
-          backgroundColor: 'rgba(96,165,250,0.08)',
+          backgroundColor: 'rgba(96,165,250,0.06)',
           tension: 0.3,
           spanGaps: true,
-          pointRadius: 4,
+          pointRadius: 5,
+          pointBackgroundColor: rhr.map(v => COLOR[cRHR(v)]),
+          pointBorderColor: rhr.map(v => COLOR[cRHR(v)]),
+          segment: {
+            borderColor: ctx => {
+              const v = rhr[ctx.p1DataIndex];
+              return COLOR[cRHR(v)] || '#60a5fa';
+            }
+          },
           yAxisID: 'rhr',
         }
       ]
@@ -277,76 +593,50 @@ function renderChart(rows) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: { legend: { labels: { color: '#94a3b8', font: { size: 11 } } } },
+      interaction: { mode:'index', intersect:false },
+      plugins: {
+        legend: { labels: { color:'#94a3b8', font:{ size:11 } } }
+      },
       scales: {
-        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#2d3348' } },
-        y: {
-          ticks: { color: '#64748b', font: { size: 10 } },
-          grid: { color: '#2d3348' },
-          title: { display: true, text: 'HRV', color: '#4ade80', font: { size: 10 } }
-        },
-        rhr: {
-          position: 'right',
-          ticks: { color: '#64748b', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-          title: { display: true, text: 'RHR', color: '#60a5fa', font: { size: 10 } }
-        }
+        x:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } },
+        y:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' },
+               title:{ display:true, text:'HRV', color:'#4ade80', font:{size:10} } },
+        rhr: { position:'right', ticks:{ color:'#64748b', font:{size:10} },
+               grid:{ drawOnChartArea:false },
+               title:{ display:true, text:'RHR', color:'#60a5fa', font:{size:10} } }
       }
     }
   });
 }
 
-function typLabel(typ) {
-  const map = {
-    running: 'Bieganie',
-    strength_training: 'Siłownia',
-    yoga: 'Joga',
-    cycling: 'Rower',
-    swimming: 'Pływanie',
-  };
-  return map[typ] || typ;
+function showToast(msg, duration=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), duration);
 }
 
-function renderTreningi(rows) {
-  const sorted = [...rows].sort((a, b) => b.data.localeCompare(a.data));
-  const html = `<div class="treningi-list">${sorted.map(t => {
-    const details = [
-      t.dystans_km ? `${t.dystans_km} km` : null,
-      t.czas_min ? `${Math.round(t.czas_min)} min` : null,
-      t.tempo ? `tempo ${t.tempo}/km` : null,
-      t.hr_avg ? `HR avg ${t.hr_avg}` : null,
-      t.z2_pct ? `Z2 ${t.z2_pct}%` : null,
-    ].filter(Boolean).join(' · ');
-    return `
-      <div class="trening-row">
-        <div class="trening-icon">${icon(t.typ)}</div>
-        <div class="trening-info">
-          <div class="typ">${typLabel(t.typ)}</div>
-          <div class="sub">${details}</div>
-        </div>
-        <div class="trening-stats">${t.data.slice(5)}</div>
-      </div>`;
-  }).join('')}</div>`;
-  document.getElementById('treningi-wrap').innerHTML = html;
+async function triggerRefresh() {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+  try {
+    await fetch(REFRESH, { method:'GET', mode:'cors' });
+    showToast('⏳ Skrypt odpalony — dane odświeżą się za ~1 minutę');
+  } catch(e) {
+    showToast('❌ Błąd połączenia z n8n');
+  }
+  setTimeout(()=>{ btn.classList.remove('loading'); btn.disabled=false; }, 3000);
 }
 
 async function load() {
   try {
     const res = await fetch(API);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) throw new Error();
     const data = await res.json();
-
-    document.getElementById('meta').textContent = `Ostatnia aktualizacja: ${data.ostatnia_aktualizacja}`;
-    renderZdrowie(data.zdrowie);
-    renderChart(data.zdrowie);
-    renderTreningi(data.treningi);
-  } catch (e) {
-    document.getElementById('meta').textContent = '';
-    ['zdrowie-wrap', 'treningi-wrap'].forEach(id => {
-      document.getElementById(id).innerHTML = `<div class="error">Błąd ładowania danych</div>`;
-    });
-    console.error(e);
+    renderPage(data);
+  } catch(e) {
+    document.getElementById('page').innerHTML = '<div class="loading">Błąd ładowania danych</div>';
   }
 }
 
