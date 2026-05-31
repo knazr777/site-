@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coach — NZR Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #2d3348;
+      background: #0f1117;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topnav a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .topnav a:hover, .topnav a.active { background: #1e2330; color: #f1f5f9; }
+
+    .page { max-width: 520px; margin: 0 auto; padding: 24px 16px 0; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 4px;
+    }
+    .page-desc { font-size: 0.82rem; color: #64748b; margin-bottom: 24px; }
+
+    .card {
+      background: #1e2330;
+      border: 1px solid #2d3348;
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 14px;
+    }
+
+    .label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    /* SCORE BUTTONS */
+    .score-row {
+      display: flex;
+      gap: 8px;
+    }
+    .score-row button {
+      flex: 1;
+      padding: 10px 0;
+      background: #151b27;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, color 0.12s;
+    }
+    .score-row button:hover { background: #1e2330; border-color: #3d4562; color: #e2e8f0; }
+    .score-row button.active { background: #1e2d4a; border-color: #4f6ef7; color: #a5b4fc; }
+    .score-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #475569;
+      margin-top: 6px;
+      padding: 0 2px;
+    }
+
+    /* TIME SLIDER */
+    .time-val {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #f1f5f9;
+      width: 60px;
+      text-align: center;
+    }
+
+    /* RADIO / CHECKBOX GROUPS */
+    .option-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .option-group label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 13px;
+      background: #151b27;
+      border: 1px solid #2d3348;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      user-select: none;
+    }
+    .option-group input { display: none; }
+    .option-group input:checked + span,
+    .option-group label:has(input:checked) {
+      background: #1e2d4a;
+      border-color: #4f6ef7;
+      color: #a5b4fc;
+    }
+    .option-group label:hover {
+      background: #1e2330;
+      border-color: #3d4562;
+      color: #e2e8f0;
+    }
+
+    /* TEXTAREA */
+    textarea {
+      width: 100%;
+      background: #151b27;
+      border: 1px solid #2d3348;
+      border-radius: 10px;
+      color: #e2e8f0;
+      font-size: 0.88rem;
+      padding: 12px 14px;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+      transition: border-color 0.15s;
+    }
+    textarea:focus { outline: none; border-color: #4f6ef7; }
+    textarea::placeholder { color: #475569; }
+
+    /* BUTTONS */
+    .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: #4f6ef7;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      margin-top: 4px;
+    }
+    .btn-primary:hover { background: #4060e8; }
+    .btn-primary:disabled { opacity: 0.4; cursor: default; }
+    .btn-primary.loading { opacity: 0.6; }
+
+    .btn-send {
+      width: 100%;
+      padding: 14px;
+      background: #16a34a;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      margin-top: 8px;
+    }
+    .btn-send:hover { background: #15803d; }
+    .btn-send:disabled { opacity: 0.4; cursor: default; }
+
+    /* RESULT */
+    .result-card {
+      background: #111827;
+      border: 1px solid #1e3a5f;
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 16px;
+      display: none;
+    }
+    .result-card.visible { display: block; }
+    .result-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #4f6ef7;
+      margin-bottom: 12px;
+    }
+    .result-text {
+      font-size: 0.9rem;
+      line-height: 1.65;
+      color: #e2e8f0;
+      white-space: pre-wrap;
+    }
+    .result-actions {
+      margin-top: 16px;
+      border-top: 1px solid #1e2d4a;
+      padding-top: 16px;
+    }
+    .sent-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: #4ade80;
+      margin-top: 8px;
+    }
+    .sent-badge.visible { display: flex; }
+
+    .spinner { display: inline-block; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-msg {
+      font-size: 0.82rem;
+      color: #f87171;
+      margin-top: 8px;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/">🏠 Hub</a>
+  <a href="/dane.html">📊 Dane</a>
+  <a href="/coach.html" class="active">🤖 Coach</a>
+  <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
+</nav>
+
+<div class="page">
+  <h2>Coach treningowy</h2>
+  <p class="page-desc">Powiedz jak się czujesz — dostaniesz dopasowaną rekomendację.</p>
+
+  <!-- ENERGIA -->
+  <div class="card">
+    <div class="label">Poziom energii</div>
+    <div class="score-row" id="energia-btns">
+      <button type="button" onclick="setScore('energia',1)">1</button>
+      <button type="button" onclick="setScore('energia',2)">2</button>
+      <button type="button" class="active" onclick="setScore('energia',3)">3</button>
+      <button type="button" onclick="setScore('energia',4)">4</button>
+      <button type="button" onclick="setScore('energia',5)">5</button>
+    </div>
+    <div class="score-labels">
+      <span>💀 Padnięty</span>
+      <span>⚡ Naładowany</span>
+    </div>
+  </div>
+
+  <!-- GOTOWOŚĆ -->
+  <div class="card">
+    <div class="label">Gotowość do ostrego wysiłku</div>
+    <div class="score-row" id="gotowosc-btns">
+      <button type="button" onclick="setScore('gotowosc',1)">1</button>
+      <button type="button" onclick="setScore('gotowosc',2)">2</button>
+      <button type="button" class="active" onclick="setScore('gotowosc',3)">3</button>
+      <button type="button" onclick="setScore('gotowosc',4)">4</button>
+      <button type="button" onclick="setScore('gotowosc',5)">5</button>
+    </div>
+    <div class="score-labels">
+      <span>🛋️ Tylko spokojnie</span>
+      <span>🔥 Dawaj mocno</span>
+    </div>
+  </div>
+
+  <!-- CZAS -->
+  <div class="card">
+    <div class="label">Dostępny czas</div>
+    <div class="slider-row">
+      <input type="range" id="czas" min="10" max="120" value="45" step="5">
+      <span class="time-val" id="czas-val">45 min</span>
+    </div>
+    <div class="slider-labels">
+      <span>10 min</span>
+      <span>120 min</span>
+    </div>
+  </div>
+
+  <!-- MPH -->
+  <div class="card">
+    <div class="label">Atenza / MPH dziś</div>
+    <div class="option-group" id="mph-group">
+      <label><input type="radio" name="mph" value="nie wzięte" checked><span>Nie wzięte</span></label>
+      <label><input type="radio" name="mph" value="przed MPH"><span>Jeszcze przed dawką</span></label>
+      <label><input type="radio" name="mph" value="MPH brane niedawno"><span>Wzięte &lt;3h temu</span></label>
+      <label><input type="radio" name="mph" value="po MPH"><span>Wzięte &gt;3h temu</span></label>
+    </div>
+  </div>
+
+  <!-- WARUNKI -->
+  <div class="card">
+    <div class="label">Warunki i dostępność</div>
+    <div class="option-group" id="warunki-group">
+      <label><input type="checkbox" value="temperatura powyżej 25°C"><span>🌡️ Temp &gt;25°C</span></label>
+      <label><input type="checkbox" value="trening z psem"><span>🐕 Z psem</span></label>
+      <label><input type="checkbox" value="dostęp do siłowni"><span>🏋️ Siłownia</span></label>
+      <label><input type="checkbox" value="dostępny rower"><span>🚴 Rower</span></label>
+    </div>
+  </div>
+
+  <!-- KOMENTARZ -->
+  <div class="card">
+    <div class="label">Coś jeszcze? (opcjonalnie)</div>
+    <textarea id="komentarz" placeholder="np. boli mnie kolano, wczoraj byłem na przyjęciu, mam tylko 20 minut i chcę pobiegać..."></textarea>
+  </div>
+
+  <button class="btn-primary" id="btn-generate" onclick="generate()">
+    Generuj rekomendację
+  </button>
+  <div class="error-msg" id="error-msg"></div>
+
+  <!-- WYNIK -->
+  <div class="result-card" id="result-card">
+    <div class="result-label">Rekomendacja</div>
+    <div class="result-text" id="result-text"></div>
+    <div class="result-actions">
+      <button class="btn-send" id="btn-send" onclick="sendToTelegram()">
+        📲 Wyślij do Telegrama i zapisz
+      </button>
+      <div class="sent-badge" id="sent-badge">✅ Wysłano i zapisano</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const N8N = 'https://n8n.nzr-hub.uk/webhook';
+let lastPayload = null;
+let lastRec = null;
+const scores = { energia: 3, gotowosc: 3 };
+
+function setScore(field, val) {
+  scores[field] = val;
+  document.querySelectorAll(`#${field}-btns button`).forEach((btn, i) => {
+    btn.classList.toggle('active', i + 1 === val);
+  });
+}
+
+document.getElementById('czas').addEventListener('input', e =>
+  document.getElementById('czas-val').textContent = e.target.value + ' min');
+
+function getMph() {
+  return document.querySelector('input[name="mph"]:checked')?.value || 'nie wzięte';
+}
+
+function getWarunki() {
+  return [...document.querySelectorAll('#warunki-group input:checked')].map(el => el.value);
+}
+
+async function generate() {
+  const btn = document.getElementById('btn-generate');
+  const errEl = document.getElementById('error-msg');
+  errEl.classList.remove('visible');
+
+  const payload = {
+    energia: scores.energia,
+    gotowosc: scores.gotowosc,
+    czas_min: parseInt(document.getElementById('czas').value),
+    mph_status: getMph(),
+    warunki: getWarunki(),
+    komentarz: document.getElementById('komentarz').value.trim(),
+  };
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner">⟳</span> Generuję...';
+  document.getElementById('result-card').classList.remove('visible');
+  document.getElementById('sent-badge').classList.remove('visible');
+  document.getElementById('btn-send').disabled = false;
+
+  try {
+    const res = await fetch(`${N8N}/coach-generate`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    lastPayload = payload;
+    lastRec = data.rekomendacja || data.text || data.output || JSON.stringify(data);
+    document.getElementById('result-text').textContent = lastRec;
+    document.getElementById('result-card').classList.add('visible');
+  } catch (e) {
+    errEl.textContent = 'Błąd połączenia: ' + e.message;
+    errEl.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generuj ponownie';
+  }
+}
+
+async function sendToTelegram() {
+  if (!lastRec) return;
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true;
+  btn.textContent = 'Wysyłam...';
+
+  try {
+    const res = await fetch(`${N8N}/coach-save`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...lastPayload, rekomendacja: lastRec }),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    document.getElementById('sent-badge').classList.add('visible');
+    btn.style.display = 'none';
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = '📲 Spróbuj ponownie';
+    alert('Błąd: ' + e.message);
+  }
+}
+</script>
+</body>
+</html>
