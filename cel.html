@@ -56,7 +56,7 @@
     .hero {
       position: relative;
       overflow: hidden;
-      min-height: 340px;
+      min-height: min(72vw, 420px);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -68,8 +68,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center top;
-      opacity: 0.45;
+      object-position: center 20%;
+      opacity: 0.6;
     }
     .hero-img-placeholder {
       position: absolute;
@@ -79,7 +79,7 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(15,17,23,0.95) 0%, rgba(15,17,23,0.3) 60%, transparent 100%);
+      background: linear-gradient(to top, rgba(15,17,23,1) 0%, rgba(15,17,23,0.55) 45%, rgba(15,17,23,0.1) 75%, transparent 100%);
     }
     .hero-content { position: relative; z-index: 2; max-width: 600px; }
     .hero-eyebrow {
@@ -581,6 +581,28 @@
     /* hidden week blocks */
     .week-block { display: none; }
     .week-block.visible { display: block; }
+
+    /* BG IMAGE SECTIONS */
+    .img-bg {
+      position: relative;
+      margin: 0 -16px;
+      padding: 0 16px 4px;
+      overflow: hidden;
+    }
+    .img-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .img-bg > * { position: relative; z-index: 1; }
+    .img-bg-1::before { background-image: url('1.png'); }
+    .img-bg-2::before { background-image: url('2.png'); }
   </style>
 </head>
 <body>
@@ -679,6 +701,7 @@
   </div>
 
   <!-- FAZY -->
+  <div class="img-bg img-bg-2">
   <div class="section-hdr">
     <h2>Plan faz</h2>
   </div>
@@ -717,123 +740,155 @@
       <span class="phase-badge badge-soon">Finał</span>
     </div>
   </div>
+  </div><!-- /img-bg-2 -->
 
-  <!-- AKTUALNY TYDZIEŃ -->
-  <div class="section-hdr">
-    <h2>Plan tygodniowy</h2>
+  <!-- KATALOG SESJI -->
+  <div class="img-bg img-bg-1">
+  <div class="section-hdr" style="padding-top:28px">
+    <h2>Katalog sesji</h2>
     <span class="badge" id="current-week-badge">Tydzień 2</span>
   </div>
 
-  <div class="week-tabs" id="week-tabs">
-    <button class="week-tab active" onclick="showWeek('1-4', this)">Tyg. 1–4</button>
-    <button class="week-tab" onclick="showWeek('5-8', this)">Tyg. 5–8</button>
-    <button class="week-tab" onclick="showWeek('9-12', this)">Tyg. 9–12</button>
-    <button class="week-tab" onclick="showWeek('13-16', this)">Tyg. 13–16</button>
-    <button class="week-tab" onclick="showWeek('17-20', this)">Tyg. 17–20</button>
-    <button class="week-tab" onclick="showWeek('21-24', this)">Tyg. 21–24</button>
+  <div class="acc-note" style="margin-bottom:14px;">
+    Coach dobiera sesję dynamicznie na podstawie HRV, Body Battery, energii i dostępnego czasu. Każda sesja ma wariant <strong style="color:var(--green)">A</strong> (pełna gotowość) i <strong style="color:var(--gold)">B</strong> (zmęczenie / mało czasu). Minimum tygodniowe: 2 biegi + 1 siła + 2 regeneracje.
   </div>
 
-  <div class="week-block visible" id="wb-1-4">
-    <div class="small-note"><strong>Adaptacja, nauka kadencji</strong> — maj 2026. Cel: przyzwyczaić stawy do ruchu, metronom 170 spm w fazach biegu.</div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem (60 s bieg / 90 s marsz, kadencja 170 spm)</td><td>30 min</td></tr>
-        <tr><td>Wt</td><td>Bieg ciągły Z2 (z metronomem 172 spm)</td><td>25 min</td></tr>
-        <tr><td>Śr</td><td>Siła kolan + bioder (Sesja A)</td><td>25 min</td></tr>
-        <tr><td>Czw</td><td>Marszobieg z psem (60 s / 90 s)</td><td>30 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off lub yoga 15 min</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2 (run-walk 5 min bieg / 1 min marsz)</td><td>35 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem</td><td>30 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2 h</td></tr>
-      </tbody>
-    </table>
+  <div class="week-tabs">
+    <button class="week-tab active" onclick="showCat('bieganie', this)">🏃 Bieganie</button>
+    <button class="week-tab" onclick="showCat('tempo', this)">⚡ Tempo</button>
+    <button class="week-tab" onclick="showCat('sila', this)">💪 Siła</button>
+    <button class="week-tab" onclick="showCat('regen', this)">🧘 Regen</button>
   </div>
 
-  <div class="week-block" id="wb-5-8">
-    <div class="small-note"><strong>Wydłużanie biegu Z2</strong> — czerwiec 2026. Kadencja 173 spm, proporcja marszobieg się odwraca.</div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem (90 s / 60 s)</td><td>35 min</td></tr>
-        <tr><td>Wt</td><td>Bieg ciągły Z2 (kadencja 173 spm)</td><td>30 min</td></tr>
-        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
-        <tr><td>Czw</td><td>Marszobieg z psem (90 s / 60 s)</td><td>35 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2 (run-walk 7 min / 1 min)</td><td>45–50 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem</td><td>30–40 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2,5 h</td></tr>
-      </tbody>
-    </table>
+  <!-- BIEGANIE -->
+  <div class="week-block visible" id="cat-bieganie">
+    <div class="ex-card">
+      <div class="ex-name">Marszobieg krótki <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z1–Z2</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 30 min</span><span style="color:var(--gold)">B: 20 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">60s bieg / 90s marsz. Metronom 170 spm w fazie biegu. Idealne z psem.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Bieg Z2 krótki <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z2</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 25 min ciągły</span><span style="color:var(--gold)">B: 20 min marszobieg</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">HR 132–145 BPM. Metronom wg bloku. Przy niskiej energii — bez presji.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Marszobieg średni <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z1–Z2</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 40 min</span><span style="color:var(--gold)">B: 30 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">90s bieg / 60s marsz lub 3 min / 1 min. Marsz z psem dozwolony. Świetna opcja po nocnej.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Bieg Z2 średni <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z2</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 35 min ciągły</span><span style="color:var(--gold)">B: 25 min marszobieg 2/1</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Główna sesja tygodniowa. Metronom przez pierwsze 20 min. Kolejny dzień: preferuj regenerację.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Bieg Z2 długi <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z2 · od bloku 13</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 45 min</span><span style="color:var(--gold)">B: 35 min run-walk 4/1</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Kadencja 175–178 spm przez całość. Nie łącz z sesją siłową tego samego dnia.</div>
+    </div>
+    <div class="acc-note" style="margin-top:4px;border-color:rgba(79,110,247,0.25);">
+      <strong>Long run</strong> — raz na 5–8 sesji biegowych. Nigdy >110% najdłuższego biegu z ostatnich 30 dni.<br>
+      Krótki (T1–4): 35 min · Średni (T5–12): 55 min · Długi (T13–20): 75 min · Bardzo długi (T17–24): 90–100 min
+    </div>
   </div>
 
-  <div class="week-block" id="wb-9-12">
-    <div class="small-note"><strong>Wprowadzenie tempa</strong> — lipiec 2026. Pierwsze interwały Z3. <strong>Tydzień 12 = deload (−30%)</strong>.</div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem Z1-Z2</td><td>35 min</td></tr>
-        <tr class="key-row"><td>Wt</td><td>Tempo: 3 × 3 min @ Z3 / 2 min jog</td><td>30 min</td></tr>
-        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
-        <tr><td>Czw</td><td>Bieg ciągły Z2</td><td>30 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off lub spacer</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2 ciągły</td><td>60 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem</td><td>30–40 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2,75 h</td></tr>
-      </tbody>
-    </table>
+  <!-- TEMPO -->
+  <div class="week-block" id="cat-tempo">
+    <div class="ex-card">
+      <div class="ex-name">Tempo interwały krótkie <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z3 · T9–12</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 30 min</span><span style="color:var(--gold)">B: 25 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">A: rozgrzewka 8 min → 3 × 3 min @ Z3 / 2 min jog → schłodzenie 5 min.<br>B: 2 × 3 min @ Z3 / 3 min marsz. Min. 48h po poprzedniej Z3.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Tempo interwały średnie <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z3 · T13–16</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 38 min</span><span style="color:var(--gold)">B: 30 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">A: 4 × 3 min @ Z3 / 2 min jog.<br>B: 3 × 3 min @ Z3 / 3 min marsz.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Tempo interwały długie <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z3 · T17–20</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 42 min</span><span style="color:var(--gold)">B: 35 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">A: 2 × 8 min @ Z3 / 3 min jog.<br>B: 2 × 5 min @ Z3 / 4 min marsz.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Tempo ciągłe Z3 <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· Z3 · T21–24</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 45 min</span><span style="color:var(--gold)">B: 37 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">A: rozgrzewka 10 min → 25 min ciągłe @ Z3 → schłodzenie 10 min.<br>W tygodniach z Magic Mile — zastąp testem.</div>
+    </div>
+    <div class="ex-card" style="border-color:rgba(245,158,11,0.25);">
+      <div class="ex-name" style="color:var(--gold2);">Test Magic Mile <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· T22 i T24</span></div>
+      <div class="ex-meta"><span>⏱ 25 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Rozgrzewka 10 min Z2 → 1 mila (1609 m) max → schłodzenie 5 min.<br>Czas × 1,3 &lt;20 min = cel B realny · 20–22 min = cel A.</div>
+    </div>
   </div>
 
-  <div class="week-block" id="wb-13-16">
-    <div class="small-note"><strong>Konsolidacja, kadencja 175 spm</strong> — sierpień 2026. Dochodzi Sesja B siłowa (2 dni siłowe/tydzień).</div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
-        <tr class="key-row"><td>Wt</td><td>Tempo: 4 × 3 min @ Z3 / 2 min jog</td><td>35 min</td></tr>
-        <tr><td>Śr</td><td>Siła Sesja A + Sesja B</td><td>25 min</td></tr>
-        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>35 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>65–75 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem</td><td>40 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~3,5 h</td></tr>
-      </tbody>
-    </table>
+  <!-- SIŁA -->
+  <div class="week-block" id="cat-sila">
+    <div class="acc-note" style="margin-bottom:10px;">Min. 48h między sesjami siłowymi obciążającymi te same partie. Nie łącz sesji A+B z biegiem ≥40 min tego samego dnia.</div>
+    <div class="ex-card">
+      <div class="ex-name">Sesja A — kolana i biodra</div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 40 min</span><span style="color:var(--gold)">B: 25 min (2 serie)</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:8px;line-height:1.8;">
+        Glute bridge — 3×12 (od T5: jednonóż)<br>
+        Clamshell z gumą — 3×15/stronę (silniejsza guma)<br>
+        Banded lateral walk — 3×12 kroków/stronę<br>
+        Bulgarian split squat — 3×8/nogę (hantle 8→10→12 kg)<br>
+        Calf raise — 3×15 (jednonóż, krawędź stopnia)
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Sesja B — stabilizacja i core <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· od T13</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 22 min</span><span style="color:var(--gold)">B: 15 min (wall sit + plank)</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:8px;line-height:1.8;">
+        Step-up — 3×10/nogę<br>
+        Single-leg RDL — 3×8/nogę (hantel 10–15 kg)<br>
+        Wall sit — 3×30–60s<br>
+        Plank — 3×30–60s
+      </div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Upper body — hantle <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· regeneracja nóg</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 25 min</span><span style="color:var(--gold)">B: 15 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Wiosłowanie, wyciskanie ramion, biceps, triceps — 3 serie, hantle 8–12 kg. Nogi nie są zaangażowane — idealne dzień przed long runem.</div>
+    </div>
+    <div class="acc-note" style="border-color:rgba(79,110,247,0.2);">
+      <strong>Kadencja — etapy:</strong><br>
+      T1–4: 170 spm, sesje ≤30 min &nbsp;·&nbsp; T5–8: 172 spm, ≤45 min<br>
+      T9–12: 173–175 spm, wszystkie poza long &nbsp;·&nbsp; T13+: 175–178 spm wszędzie
+    </div>
   </div>
 
-  <div class="week-block" id="wb-17-20">
-    <div class="small-note"><strong>Pierwsze 90 min</strong> — wrzesień 2026. Long bieg osiąga 90 minut. Interwały wydłużają się do 2 × 8 min.</div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
-        <tr class="key-row"><td>Wt</td><td>Tempo: 2 × 8 min @ Z3 / 3 min jog</td><td>40 min</td></tr>
-        <tr><td>Śr</td><td>Siła Sesja A + B</td><td>25+25 min</td></tr>
-        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>40 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>75–90 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem</td><td>40 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~4 h</td></tr>
-      </tbody>
-    </table>
+  <!-- REGENERACJA -->
+  <div class="week-block" id="cat-regen">
+    <div class="acc-note" style="margin-bottom:10px;">Sesje regeneracyjne <strong>liczą się do planu</strong> — nie lenistwo. Idealne dzień po long runie lub Z3.</div>
+    <div class="ex-card">
+      <div class="ex-name">Mobility i rozciąganie</div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 25 min</span><span style="color:var(--gold)">B: 15 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Foam rolling + dynamiczne rozciąganie bioder, łydek, pasma IT. Skupienie na kolanach. Można przy kawie rano.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Yoga dla biegaczy</div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 30 min</span><span style="color:var(--gold)">B: 20 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">YouTube: Yoga with Adriene — Yoga for Runners. Yin yoga na regenerację głęboką. Garmin rejestruje jako aktywność.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Pilates core</div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 25 min</span><span style="color:var(--gold)">B: 15 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Stabilizacja miednicy i odcinka lędźwiowego. Dobra opcja sobota przed long runem — bez obciążania nóg.</div>
+    </div>
+    <div class="ex-card">
+      <div class="ex-name">Trening Jacobsona</div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 20 min</span><span style="color:var(--gold)">B: 15 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Progresywna relaksacja mięśniowa w leżeniu. Naprzemienne napinanie i rozluźnianie od stóp do głowy. Najlepsza opcja przy bardzo niskiej energii.</div>
+    </div>
+    <div class="ex-card" style="border-color:rgba(96,165,250,0.25);">
+      <div class="ex-name" style="color:#60a5fa;">Cross-training: rower Z2 <span style="color:var(--muted);font-weight:400;font-size:0.75rem">· gdy dostępny</span></div>
+      <div class="ex-meta"><span style="color:var(--green)">A: 60 min</span><span style="color:var(--gold)">B: 40 min</span></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-top:6px;line-height:1.5;">Identyczna adaptacja aerobowa jak bieg Z2, bez obciążenia kolan. HR 132–145 BPM. Zastępuje marszobieg lub bieg Z2.</div>
+    </div>
   </div>
 
-  <div class="week-block" id="wb-21-24">
-    <div class="small-note"><strong>Peak Faza 1</strong> — październik 2026. 25 min ciągłe @ Z3. Long bieg 90–100 min. <strong>Tydzień 24 = deload przed Fazą 2.</strong></div>
-    <table class="plan-table">
-      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
-      <tbody>
-        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
-        <tr class="key-row"><td>Wt</td><td>Tempo: 25 min ciągłe @ Z3</td><td>45 min</td></tr>
-        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
-        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>45 min</td></tr>
-        <tr class="rest-row"><td>Pt</td><td>Off lub Z1 marsz</td><td>—</td></tr>
-        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>90–100 min</td></tr>
-        <tr><td>Nd</td><td>Marsz z psem + Siła B</td><td>40+20 min</td></tr>
-        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~4,5 h</td></tr>
-      </tbody>
-    </table>
-  </div>
+  </div><!-- /img-bg-1 -->
 
   <!-- ACCORDIONY -->
   <div class="section-hdr">
@@ -846,15 +901,23 @@
       <span class="sum-left"><span class="sum-icon">💓</span> Strefy tętna</span>
     </summary>
     <div class="acc-body">
-      <div class="acc-note" style="margin-bottom:12px;"><strong>Z dawką MPH (Atenza):</strong> dodaj ~10 BPM do każdej strefy. Treningi rano przed dawką = niższe HR.</div>
-      <div class="zone-grid">
-        <div class="zone-pill z1"><div class="zname">Z1 — Regeneracja</div><div class="zbpm">&lt;130 BPM</div><div class="zdesc">Marsz, marszobieg z psem</div></div>
-        <div class="zone-pill z2"><div class="zname">Z2 — Baza</div><div class="zbpm">138–152 BPM</div><div class="zdesc">Większość biegów. Pełne zdania.</div></div>
-        <div class="zone-pill z3"><div class="zname">Z3 — Tempo / MP</div><div class="zbpm">153–164 BPM</div><div class="zdesc">Interwały, tempo runsy</div></div>
-        <div class="zone-pill z4"><div class="zname">Z4 — Próg</div><div class="zbpm">165–172 BPM</div><div class="zdesc">Próg mleczanowy, krótko</div></div>
-        <div class="zone-pill z5"><div class="zname">Z5 — VO₂max</div><div class="zbpm">173–180 BPM</div><div class="zdesc">Sporadycznie. Sufit: 175 BPM.</div></div>
+      <div class="acc-note" style="margin-bottom:12px;">Dwa zestawy stref — zależy od tego czy wziąłeś Atenzę.</div>
+      <div class="label" style="margin-bottom:8px;font-size:0.7rem;color:#64748b;">BEZ MPH (rano przed dawką)</div>
+      <div class="zone-grid" style="margin-bottom:14px;">
+        <div class="zone-pill z1"><div class="zname">Z1</div><div class="zbpm">118–131</div><div class="zdesc">Marsz, marszobieg</div></div>
+        <div class="zone-pill z2"><div class="zname">Z2 — Baza</div><div class="zbpm">132–145</div><div class="zdesc">Większość biegów</div></div>
+        <div class="zone-pill z3"><div class="zname">Z3 — Tempo</div><div class="zbpm">146–158</div><div class="zdesc">Interwały, tempo</div></div>
+        <div class="zone-pill z4"><div class="zname">Z4 — Próg</div><div class="zbpm">159–171</div><div class="zdesc">Krótko, kontrolowanie</div></div>
+        <div class="zone-pill z5"><div class="zname">Z5</div><div class="zbpm">172+</div><div class="zdesc">Sporadycznie</div></div>
       </div>
-      <div class="acc-note" style="margin-top:12px;"><strong>Twardy sufit:</strong> alarm Garmin przy 175 BPM. Jeśli >175 BPM przez 3 min → marsz aż HR &lt;160.</div>
+      <div class="label" style="margin-bottom:8px;font-size:0.7rem;color:#f59e0b;">Z MPH (Atenza aktywna)</div>
+      <div class="zone-grid">
+        <div class="zone-pill z1"><div class="zname">Z1</div><div class="zbpm">128–141</div><div class="zdesc">Marsz, rozgrzewka</div></div>
+        <div class="zone-pill z2"><div class="zname">Z2 — Baza</div><div class="zbpm">142–158</div><div class="zdesc">Większość biegów</div></div>
+        <div class="zone-pill z3"><div class="zname">Z3 — Tempo</div><div class="zbpm">153–167</div><div class="zdesc">Interwały</div></div>
+        <div class="zone-pill z4"><div class="zname">Z4 — Próg</div><div class="zbpm">168–178</div><div class="zdesc">Bardzo krótko</div></div>
+      </div>
+      <div class="acc-note" style="margin-top:12px;"><strong>Twardy sufit z MPH: 175 BPM.</strong> Alarm w Garminie. Jeśli >175 BPM przez 3 min → marsz aż HR &lt;160.</div>
     </div>
   </details>
 
@@ -960,28 +1023,6 @@
     </div>
   </details>
 
-  <!-- GALERIA -->
-  <div class="section-hdr">
-    <h2>Architekt Wartości</h2>
-    <span class="badge">Misja</span>
-  </div>
-
-  <div class="gallery-grid">
-    <!-- Wrzuć grafiki do folderu site/ i zmień src poniżej -->
-    <!-- 1.png — najważniejsza, duża -->
-    <div class="gallery-item span2">
-      <img src="1.png" alt="Architekt Wartości" loading="lazy">
-      <div class="gallery-caption">Architekt Wartości — blueprint maratonu</div>
-    </div>
-    <!-- 2.png -->
-    <div class="gallery-item">
-      <img src="2.png" alt="" loading="lazy">
-    </div>
-    <!-- 4.png — czwarty priorytet, mała -->
-    <div class="gallery-item">
-      <img src="4.png" alt="" loading="lazy">
-    </div>
-  </div>
 
 </div><!-- /page -->
 
@@ -1045,24 +1086,13 @@
     else if (i === phaseNum) el.classList.add('active');
   }
 
-  // auto-select correct week tab
-  const tabMap = [
-    [1, 4, '1-4'], [5, 8, '5-8'], [9, 12, '9-12'],
-    [13, 16, '13-16'], [17, 20, '17-20'], [21, 51, '21-24']
-  ];
-  for (const [from, to, id] of tabMap) {
-    if (weekNum >= from && weekNum <= to) {
-      showWeek(id, document.querySelector(`[onclick="showWeek('${id}', this)"]`));
-      break;
-    }
-  }
 })();
 
-// ─── WEEK TAB SWITCHER ───
-function showWeek(id, btn) {
+// ─── CATALOG TAB SWITCHER ───
+function showCat(id, btn) {
   document.querySelectorAll('.week-block').forEach(el => el.classList.remove('visible'));
   document.querySelectorAll('.week-tab').forEach(el => el.classList.remove('active'));
-  const block = document.getElementById('wb-' + id);
+  const block = document.getElementById('cat-' + id);
   if (block) block.classList.add('visible');
   if (btn) btn.classList.add('active');
 }
