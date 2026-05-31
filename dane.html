@@ -101,6 +101,9 @@
       border: 1px solid #2d3348;
       border-radius: 14px;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     /* SLIDE 1 — STATUS */
@@ -144,11 +147,11 @@
     }
     .health-table td { padding: 7px 6px 7px 0; border-top: 1px solid #2d3348; color: #cbd5e1; }
     .health-table tr:first-child td { border-top: none; }
-    .g  { color: #4ade80; }
-    .y  { color: #facc15; }
-    .o  { color: #fb923c; }
-    .r  { color: #f87171; }
-    .d  { color: #475569; }
+    .g, td.g, .p-value.g { color: #4ade80 !important; }
+    .y, td.y, .p-value.y { color: #facc15 !important; }
+    .o, td.o, .p-value.o { color: #fb923c !important; }
+    .r, td.r, .p-value.r { color: #f87171 !important; }
+    .d, td.d, .p-value.d { color: #475569 !important; }
 
     /* TRENINGI */
     .trening-item { border-top: 1px solid #2d3348; padding: 12px 0; }
@@ -289,8 +292,9 @@ function calcStatus(zdrowie, treningi) {
   // Szukaj najnowszego dnia z danymi
   const latest = sorted[0];
   // Użyj bb_min jako aktualnego stanu (po całym dniu / po treningu)
-  // bb_max = szczyt po przebudzeniu (po śnie) — właściwa miara dostępnej energii
-  const bb = latest.bb_max;
+  // bb_last = ostatnia znana wartość z dnia (po treningu / wieczorem) — aktualny stan
+  // fallback na bb_max jeśli bb_last niedostępne (starsze wpisy)
+  const bb = latest.bb_last != null ? latest.bb_last : latest.bb_max;
 
   // Czas od ostatniego treningu w godzinach
   const lastT = treningi.sort((a,b)=>b.data.localeCompare(a.data))[0];
@@ -592,7 +596,7 @@ function renderChartKondycja(zdrowie) {
               { text:'Słaba (25–44)', fillStyle:'#fb923c', strokeStyle:'#fb923c', lineWidth:0 },
               { text:'Zła (<25)',     fillStyle:'#f87171', strokeStyle:'#f87171', lineWidth:0 },
             ],
-            color: '#94a3b8', font:{ size:10 }, boxWidth:10, padding:10,
+            color: '#cbd5e1', font:{ size:10 }, boxWidth:10, padding:8,
           }
         },
         datalabels: {
