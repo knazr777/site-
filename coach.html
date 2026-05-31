@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coach — NZR Hub</title>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -207,8 +208,13 @@
       font-size: 0.9rem;
       line-height: 1.65;
       color: #e2e8f0;
-      white-space: pre-wrap;
     }
+    .result-text p { margin-bottom: 10px; }
+    .result-text p:last-child { margin-bottom: 0; }
+    .result-text strong { color: #f1f5f9; }
+    .result-text ol, .result-text ul { padding-left: 20px; margin-bottom: 10px; }
+    .result-text li { margin-bottom: 6px; }
+    .result-text h3 { font-size: 0.95rem; color: #a5b4fc; margin: 12px 0 6px; }
     .result-actions {
       margin-top: 16px;
       border-top: 1px solid #1e2d4a;
@@ -394,7 +400,7 @@ async function generate() {
     const data = await res.json();
     lastPayload = payload;
     lastRec = data.rekomendacja || data.text || data.output || JSON.stringify(data);
-    document.getElementById('result-text').textContent = lastRec;
+    document.getElementById('result-text').innerHTML = marked.parse(lastRec);
     document.getElementById('result-card').classList.add('visible');
   } catch (e) {
     errEl.textContent = 'Błąd połączenia: ' + e.message;

@@ -297,12 +297,12 @@ function calcStatus(zdrowie, treningi) {
   // fallback na bb_max jeśli bb_last niedostępne (starsze wpisy)
   const bb = latest.bb_last != null ? latest.bb_last : latest.bb_max;
 
-  // Czas od ostatniego treningu w godzinach
+  // Czas od ostatniego treningu
   const lastT = treningi.sort((a,b)=>b.data.localeCompare(a.data))[0];
   let hoursRest = null;
-  if(lastT) {
-    const msPerH = 3600000;
-    hoursRest = Math.round((Date.now() - new Date(lastT.data).getTime()) / msPerH);
+  if (lastT) {
+    const dtStr = lastT.godzina ? `${lastT.data}T${lastT.godzina}:00` : `${lastT.data}T12:00:00`;
+    hoursRest = Math.round((Date.now() - new Date(dtStr).getTime()) / 3600000);
   }
 
   const scores = [s(cHRV(latest.hrv)), s(cRHR(latest.rhr)), s(cSen(latest.sen_godz)), s(cBB(bb))].filter(x=>x!==null);
@@ -597,7 +597,7 @@ function renderChartKondycja(zdrowie) {
               { text:'Słaba (25–44)', fillStyle:'#fb923c', strokeStyle:'#fb923c', lineWidth:0 },
               { text:'Zła (<25)',     fillStyle:'#f87171', strokeStyle:'#f87171', lineWidth:0 },
             ],
-            color: '#cbd5e1', font:{ size:10 }, boxWidth:10, padding:8,
+            color: '#f1f5f9', font:{ size:10 }, boxWidth:10, padding:8,
           }
         },
         datalabels: {
