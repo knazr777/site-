@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dane Garmin</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -122,14 +123,17 @@
       gap: 10px;
     }
     .week-row:first-child { border-top: none; }
-    .week-date { font-size: 0.78rem; color: #64748b; width: 36px; flex-shrink: 0; }
+    .week-date { font-size: 0.75rem; color: #64748b; width: 52px; flex-shrink: 0; line-height: 1.2; }
     .week-icon { font-size: 1.2rem; width: 26px; text-align: center; flex-shrink: 0; }
-    .week-info { flex: 1; }
-    .week-info .wi-name { font-size: 0.82rem; color: #f1f5f9; font-weight: 500; }
-    .week-info .wi-sub { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
-    .week-intensity { width: 60px; flex-shrink: 0; }
-    .intensity-bar { height: 5px; border-radius: 3px; margin-top: 2px; }
-    .intensity-label { font-size: 0.65rem; color: #64748b; }
+    .week-info { flex: 1; min-width: 0; }
+    .week-info .wi-name { font-size: 0.82rem; color: #f1f5f9; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .week-info .wi-sub { font-size: 0.72rem; color: #64748b; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .week-badge {
+      flex-shrink: 0;
+      font-size: 0.68rem; font-weight: 600;
+      padding: 3px 7px; border-radius: 6px;
+      letter-spacing: 0.03em;
+    }
 
     /* SLIDE 3 — TABELA ZDROWIA */
     .health-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
@@ -140,7 +144,11 @@
     }
     .health-table td { padding: 7px 6px 7px 0; border-top: 1px solid #2d3348; color: #cbd5e1; }
     .health-table tr:first-child td { border-top: none; }
-    .g { color: #4ade80; } .y { color: #facc15; } .r { color: #f87171; } .d { color: #475569; }
+    .g  { color: #4ade80; }
+    .y  { color: #facc15; }
+    .o  { color: #fb923c; }
+    .r  { color: #f87171; }
+    .d  { color: #475569; }
 
     /* TRENINGI */
     .trening-item { border-top: 1px solid #2d3348; padding: 12px 0; }
@@ -227,16 +235,34 @@ const TYPY  = { running:'Bieganie', strength_training:'Siłownia', yoga:'Joga', 
 function icon(t) { return ICONS[t] || '🏋️'; }
 function typ(t)  { return TYPY[t]  || t; }
 
-// ── KOLORY ───────────────────────────────────────────────────────────
-const COL = { green:'#4ade80', yellow:'#facc15', red:'#f87171', dim:'#475569' };
+const MONTHS = ['sty','lut','mar','kwi','maj','cze','lip','sie','wrz','paź','lis','gru'];
+function fmtDate(str) {
+  const d = new Date(str);
+  return d.getDate() + ' ' + MONTHS[d.getMonth()];
+}
 
-function cHRV(v) { if(!v) return 'dim'; return v>=T.hrv.green?'green':v>=T.hrv.yellow?'yellow':'red'; }
-function cRHR(v) { if(!v) return 'dim'; return v<=T.rhr.green?'green':v<=T.rhr.yellow?'yellow':'red'; }
-function cSen(v) { if(!v) return 'dim'; return v>=T.sen.green?'green':v>=T.sen.yellow?'yellow':'red'; }
-function cBB(v)  { if(!v) return 'dim'; return v>=T.bb.green?'green':v>=T.bb.yellow?'yellow':'red'; }
+// ── KOLORY (4-stopniowe) ─────────────────────────────────────────────
+const COL = { green:'#4ade80', yellow:'#facc15', orange:'#fb923c', red:'#f87171', dim:'#475569' };
+
+function cHRV(v) {
+  if(!v) return 'dim';
+  if(v>=82) return 'green'; if(v>=72) return 'yellow'; if(v>=62) return 'orange'; return 'red';
+}
+function cRHR(v) {
+  if(!v) return 'dim';
+  if(v<=51) return 'green'; if(v<=54) return 'yellow'; if(v<=57) return 'orange'; return 'red';
+}
+function cSen(v) {
+  if(!v) return 'dim';
+  if(v>=7) return 'green'; if(v>=6) return 'yellow'; if(v>=5) return 'orange'; return 'red';
+}
+function cBB(v) {
+  if(!v) return 'dim';
+  if(v>=80) return 'green'; if(v>=60) return 'yellow'; if(v>=40) return 'orange'; return 'red';
+}
 
 // ── SCORE (0–2 per metryka) ───────────────────────────────────────────
-function s(col) { return col==='green'?2:col==='yellow'?1:col==='red'?0:null; }
+function s(col) { return col==='green'?2:col==='yellow'?1.5:col==='orange'?0.7:col==='red'?0:null; }
 
 // ── KONDYCJA COMPOSITE (0–100) ────────────────────────────────────────
 // HRV*0.4 + RHR_inv*0.3 + BB*0.3 — każde znormalizowane do zakresu użytkownika
@@ -263,7 +289,8 @@ function calcStatus(zdrowie, treningi) {
   // Szukaj najnowszego dnia z danymi
   const latest = sorted[0];
   // Użyj bb_min jako aktualnego stanu (po całym dniu / po treningu)
-  const bb = latest.bb_min > 5 ? latest.bb_min : latest.bb_max; // fallback jeśli bb_min=5 (brak danych)
+  // bb_max = szczyt po przebudzeniu (po śnie) — właściwa miara dostępnej energii
+  const bb = latest.bb_max;
 
   // Czas od ostatniego treningu w godzinach
   const lastT = treningi.sort((a,b)=>b.data.localeCompare(a.data))[0];
@@ -311,15 +338,17 @@ function statusComment(st) {
 
 // ── INTENSYWNOŚĆ TRENINGU ─────────────────────────────────────────────
 function trainingIntensity(t) {
-  if(!t) return { label:'', color:'#2d3348', pct:0 };
+  if(!t) return null;
   const z3z4 = (t.z3_pct||0) + (t.z4_pct||0);
   const z2   = t.z2_pct||0;
-  if(t.typ==='strength_training') return { label:'Siła',    color:'#a78bfa', pct:60 };
-  if(t.typ==='yoga')              return { label:'Regen',   color:'#34d399', pct:20 };
-  if(z3z4 >= 25)                  return { label:'Wysoka',  color:'#f87171', pct:90 };
-  if(z3z4 >= 10)                  return { label:'Średnia', color:'#facc15', pct:60 };
-  if(z2 >= 50)                    return { label:'Z2',      color:'#4ade80', pct:40 };
-  return                                  { label:'Niska',   color:'#60a5fa', pct:25 };
+  if(t.typ==='strength_training') return { label:'Siła',    bg:'rgba(167,139,250,0.2)', col:'#a78bfa' };
+  if(t.typ==='yoga')              return { label:'Regen',   bg:'rgba(52,211,153,0.2)',  col:'#34d399' };
+  if(t.typ==='cycling')           return { label:'Rower',   bg:'rgba(96,165,250,0.2)',  col:'#60a5fa' };
+  if(t.typ==='swimming')          return { label:'Basen',   bg:'rgba(96,165,250,0.2)',  col:'#60a5fa' };
+  if(z3z4 >= 25)                  return { label:'Wysoka',  bg:'rgba(248,113,113,0.2)', col:'#f87171' };
+  if(z3z4 >= 10)                  return { label:'Średnia', bg:'rgba(250,204,21,0.2)',  col:'#facc15' };
+  if(z2 >= 50)                    return { label:'Z2',      bg:'rgba(74,222,128,0.2)',  col:'#4ade80' };
+  return                                  { label:'Niska',   bg:'rgba(96,165,250,0.15)', col:'#60a5fa' };
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────
@@ -327,7 +356,7 @@ function fmt(v, suf='', dec=0) {
   if(v===null||v===undefined) return '<span class="d">—</span>';
   return (dec?(+v).toFixed(dec):v)+suf;
 }
-function clx(col) { return col==='green'?'g':col==='yellow'?'y':col==='red'?'r':'d'; }
+function clx(col) { return col==='green'?'g':col==='yellow'?'y':col==='orange'?'o':col==='red'?'r':'d'; }
 
 // ── KARUZELA ─────────────────────────────────────────────────────────
 function initCarousel(id, tabsId) {
@@ -400,23 +429,20 @@ function renderPage(data) {
           ${last7.map(day => {
             const t = day.training;
             const intens = trainingIntensity(t);
-            const isRest = !t;
+            const sub = t ? [
+              t.dystans_km ? t.dystans_km+'km' : null,
+              t.czas_min   ? Math.round(t.czas_min)+'min' : null,
+              t.tempo      ? t.tempo+'/km' : null,
+            ].filter(Boolean).join(' · ') : '';
             return `
             <div class="week-row">
-              <div class="week-date">${day.date.slice(5)}</div>
+              <div class="week-date">${fmtDate(day.date)}</div>
               <div class="week-icon">${t ? icon(t.typ) : '😴'}</div>
               <div class="week-info">
                 <div class="wi-name">${t ? typ(t.typ) : 'Regeneracja'}</div>
-                <div class="wi-sub">${t ? [
-                  t.dystans_km ? t.dystans_km+'km' : null,
-                  t.czas_min   ? Math.round(t.czas_min)+'min' : null,
-                  t.tempo      ? t.tempo+'/km' : null,
-                ].filter(Boolean).join(' · ') : ''}</div>
+                ${sub ? `<div class="wi-sub">${sub}</div>` : ''}
               </div>
-              ${t ? `<div class="week-intensity">
-                <div class="intensity-label">${intens.label}</div>
-                <div class="intensity-bar" style="background:${intens.color};width:${intens.pct}%"></div>
-              </div>` : ''}
+              ${intens ? `<div class="week-badge" style="background:${intens.bg};color:${intens.col}">${intens.label}</div>` : ''}
             </div>`;
           }).join('')}
         </div>
@@ -430,12 +456,12 @@ function renderPage(data) {
             </tr></thead>
             <tbody>
               ${zdrowie.map(r=>`<tr>
-                <td>${r.data.slice(5)}</td>
+                <td>${fmtDate(r.data)}</td>
                 <td class="${clx(cHRV(r.hrv))}">${r.hrv??'—'}</td>
                 <td class="${clx(cRHR(r.rhr))}">${r.rhr??'—'}</td>
                 <td class="${clx(cBB(r.bb_max))}">${r.bb_max??'—'}</td>
                 <td class="${clx(cSen(r.sen_godz))}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
-                <td>${r.jakosc_snu??'—'}</td>
+                <td class="${clx(cBB(r.jakosc_snu))}">${r.jakosc_snu??'—'}</td>
               </tr>`).join('')}
             </tbody>
           </table>
@@ -526,32 +552,60 @@ function switchChart(idx) {
 // ── CHART 1: KONDYCJA ─────────────────────────────────────────────────
 function renderChartKondycja(zdrowie) {
   const sorted = [...zdrowie].sort((a,b)=>a.data.localeCompare(b.data));
-  const labels  = sorted.map(r=>r.data.slice(5));
+  const labels  = sorted.map(r=>fmtDate(r.data));
   const scores  = sorted.map(r=>kondycjaScore(r.hrv, r.rhr, r.bb_max));
   const colors  = scores.map(v=>{
     if(v===null) return COL.dim;
     if(v>=70) return COL.green;
     if(v>=45) return COL.yellow;
+    if(v>=25) return '#fb923c';
     return COL.red;
   });
+
+  // Skala: min - 10 poniżej najniższego, max + 5 powyżej najwyższego
+  const valid = scores.filter(v=>v!==null);
+  const yMin = valid.length ? Math.max(0,  Math.floor(Math.min(...valid)) - 10) : 0;
+  const yMax = valid.length ? Math.min(100, Math.ceil(Math.max(...valid))  + 5)  : 100;
+
+  Chart.register(ChartDataLabels);
 
   new Chart(document.getElementById('chartKondycja'), {
     type: 'bar',
     data: {
       labels,
       datasets: [{
-        label: 'Kondycja (0–100)',
+        label: 'Kondycja',
         data: scores,
         backgroundColor: colors,
-        borderRadius: 6,
+        borderRadius: 5,
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend:{ display:false } },
+      plugins: {
+        legend: {
+          display: true,
+          labels: {
+            generateLabels: () => [
+              { text:'Świetna (≥70)', fillStyle:'#4ade80', strokeStyle:'#4ade80', lineWidth:0 },
+              { text:'Dobra (45–69)', fillStyle:'#facc15', strokeStyle:'#facc15', lineWidth:0 },
+              { text:'Słaba (25–44)', fillStyle:'#fb923c', strokeStyle:'#fb923c', lineWidth:0 },
+              { text:'Zła (<25)',     fillStyle:'#f87171', strokeStyle:'#f87171', lineWidth:0 },
+            ],
+            color: '#94a3b8', font:{ size:10 }, boxWidth:10, padding:10,
+          }
+        },
+        datalabels: {
+          anchor: 'end', align: 'end',
+          color: '#94a3b8',
+          font: { size: 9, weight: '600' },
+          formatter: v => v !== null ? Math.round(v) : '',
+          offset: -2,
+        }
+      },
       scales: {
         x: { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } },
-        y: { min:0, max:100, ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } }
+        y: { min: yMin, max: yMax, ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } }
       }
     }
   });
@@ -564,9 +618,10 @@ function renderChartProgres(treningi) {
     .filter(t=>t.typ==='running' && t.czas_min)
     .sort((a,b)=>a.data.localeCompare(b.data));
 
-  const labels   = runs.map(r=>r.data.slice(5));
+  const labels   = runs.map(r=>fmtDate(r.data));
   const volumen  = runs.map(r=>Math.round(r.czas_min));
-  const vo2      = runs.map(r=>r.vo2max||null);
+  // Filtruj nieprawidłowe wartości VO2max (>100 = moc w watach, nie VO2max)
+  const vo2      = runs.map(r=>(r.vo2max && r.vo2max <= 100) ? r.vo2max : null);
   const hasVo2   = vo2.some(v=>v!==null);
 
   const datasets = [{
