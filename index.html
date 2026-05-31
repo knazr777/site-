@@ -17,7 +17,24 @@
       align-items: center;
       justify-content: center;
       padding: 24px 16px;
+      position: relative;
     }
+    .bg-cover {
+      position: fixed;
+      inset: 0;
+      background: url('HOME.png') center/cover no-repeat;
+      opacity: 0.28;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .bg-cover-fade {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(15,17,23,0.3) 0%, rgba(15,17,23,0.6) 60%, rgba(15,17,23,0.9) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .topnav, h1, .subtitle, .nav { position: relative; z-index: 1; }
 
     h1 {
       font-size: 2rem;
@@ -101,11 +118,14 @@
   </style>
 </head>
 <body>
+  <div class="bg-cover"></div>
+  <div class="bg-cover-fade"></div>
 
   <nav class="topnav">
     <a href="/" class="active">🏠 Hub</a>
     <a href="/dane.html">📊 Dane</a>
     <a href="/coach.html">🤖 Coach</a>
+    <a href="/cel.html">🎯 Cel</a>
     <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
   </nav>
 
@@ -127,6 +147,15 @@
       <span class="btn-text">
         <span class="title">Coach</span>
         <span class="desc">Rekomendacja treningowa na dziś</span>
+      </span>
+      <span class="btn-arrow"></span>
+    </a>
+
+    <a class="btn" href="/cel.html">
+      <span class="btn-icon">🎯</span>
+      <span class="btn-text">
+        <span class="title">Cel</span>
+        <span class="desc">Architekt Wartości — Warszawa 2027</span>
       </span>
       <span class="btn-arrow"></span>
     </a>

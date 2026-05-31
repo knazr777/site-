@@ -200,6 +200,23 @@
     .toast.show { transform: translateX(-50%) translateY(0); }
 
     .loading { color: #64748b; text-align: center; padding: 48px; }
+
+    /* MOTIVATIONAL STRIP */
+    .moto-strip {
+      max-width: 520px;
+      margin: 0 auto 16px;
+      padding: 0 16px;
+    }
+    .moto-strip-img {
+      width: 100%;
+      height: 90px;
+      object-fit: cover;
+      object-position: center 30%;
+      border-radius: 12px;
+      opacity: 0.55;
+      display: block;
+      border: 1px solid #2d3348;
+    }
   </style>
 </head>
 <body>
@@ -208,12 +225,17 @@
   <a href="/">🏠 Hub</a>
   <a href="/dane.html" class="active">📊 Dane</a>
   <a href="/coach.html">🤖 Coach</a>
+  <a href="/cel.html">🎯 Cel</a>
   <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
   <div class="spacer"></div>
   <button class="refresh-btn" id="refreshBtn" onclick="triggerRefresh()">
     <span class="spin">↻</span> Odśwież
   </button>
 </nav>
+
+<div class="moto-strip">
+  <img class="moto-strip-img" src="3.png" alt="" loading="lazy">
+</div>
 
 <div class="page" id="page">
   <div class="loading">Ładowanie danych…</div>

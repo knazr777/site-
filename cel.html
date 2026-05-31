@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cel — Architekt Wartości</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --bg2: #1e2330;
+      --bg3: #151b27;
+      --border: #2d3348;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent: #4f6ef7;
+      --accent2: #a5b4fc;
+      --green: #4ade80;
+      --gold: #f59e0b;
+      --gold2: #fcd34d;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* NAV */
+    .topnav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .topnav a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #94a3b8;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .topnav a:hover, .topnav a.active { background: var(--bg2); color: #f1f5f9; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 340px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 20px 28px;
+    }
+    .hero-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0.45;
+    }
+    .hero-img-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0a0e1a 0%, #1a2240 50%, #0d1520 100%);
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15,17,23,0.95) 0%, rgba(15,17,23,0.3) 60%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 600px; }
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+    .hero-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f8fafc;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero-title span { color: var(--gold2); }
+
+    /* countdown row */
+    .countdown-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .cd-block {
+      background: rgba(15,17,23,0.7);
+      border: 1px solid rgba(245,158,11,0.25);
+      border-radius: 10px;
+      padding: 8px 14px;
+      text-align: center;
+      min-width: 56px;
+      backdrop-filter: blur(8px);
+    }
+    .cd-num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--gold2);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .cd-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94a3b8;
+      margin-top: 3px;
+    }
+    .cd-separator {
+      display: flex;
+      align-items: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+      opacity: 0.5;
+      padding-bottom: 16px;
+    }
+
+    /* phase progress bar in hero */
+    .phase-bar-wrap {
+      background: rgba(15,17,23,0.7);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 16px;
+      backdrop-filter: blur(8px);
+      max-width: 420px;
+    }
+    .phase-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+    .phase-bar-label strong { color: var(--accent2); }
+    .phase-track {
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .phase-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--accent) 0%, var(--gold) 100%);
+      transition: width 0.6s ease;
+    }
+    .phase-dots {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    /* ─── LAYOUT ─── */
+    .page { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+    /* ─── SECTION HEADER ─── */
+    .section-hdr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 28px 0 14px;
+    }
+    .section-hdr h2 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f8fafc;
+      letter-spacing: 0.01em;
+    }
+    .section-hdr .badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: rgba(79,110,247,0.15);
+      color: var(--accent2);
+      border: 1px solid rgba(79,110,247,0.3);
+    }
+
+    /* ─── GOAL CARDS ─── */
+    .goal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .goal-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .goal-card.primary { border-color: rgba(245,158,11,0.4); }
+    .goal-card.stretch { border-color: rgba(79,110,247,0.4); }
+    .goal-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .goal-card.primary::before { background: linear-gradient(90deg, var(--gold), var(--gold2)); }
+    .goal-card.stretch::before { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .goal-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .goal-time {
+      font-size: 1.6rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .goal-card.primary .goal-time { color: var(--gold2); }
+    .goal-card.stretch .goal-time { color: var(--accent2); }
+    .goal-desc { font-size: 0.75rem; color: #94a3b8; line-height: 1.4; }
+
+    .decision-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 0.82rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 4px;
+    }
+    .decision-card strong { color: var(--accent2); }
+
+    /* ─── PHASE TIMELINE ─── */
+    .phase-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .phase-item {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .phase-item.active {
+      border-color: rgba(79,110,247,0.5);
+      background: #1a2040;
+    }
+    .phase-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--accent);
+    }
+    .phase-item.done { opacity: 0.5; }
+    .phase-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 800;
+      flex-shrink: 0;
+      border: 2px solid var(--border);
+      color: var(--muted);
+    }
+    .phase-item.active .phase-num {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .phase-item.done .phase-num {
+      background: rgba(74,222,128,0.15);
+      border-color: rgba(74,222,128,0.3);
+      color: var(--green);
+    }
+    .phase-info { flex: 1; }
+    .phase-name { font-size: 0.88rem; font-weight: 700; color: #f1f5f9; margin-bottom: 2px; }
+    .phase-meta { font-size: 0.73rem; color: var(--muted); }
+    .phase-item.active .phase-meta { color: var(--accent2); }
+    .phase-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .badge-active { background: rgba(79,110,247,0.2); color: var(--accent2); border: 1px solid rgba(79,110,247,0.3); }
+    .badge-soon { background: rgba(100,116,139,0.15); color: var(--muted); border: 1px solid var(--border); }
+
+    /* ─── ACCORDION ─── */
+    details {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    details[open] { border-color: rgba(79,110,247,0.35); }
+    summary {
+      padding: 16px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after {
+      content: '›';
+      font-size: 1.2rem;
+      color: var(--muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    details[open] summary::after { transform: rotate(90deg); }
+    summary .sum-left { display: flex; align-items: center; gap: 10px; }
+    summary .sum-icon { font-size: 1rem; }
+    .acc-body { padding: 0 16px 16px; }
+
+    /* tables inside accordions */
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .plan-table th {
+      text-align: left;
+      padding: 6px 8px 6px 0;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+    .plan-table td {
+      padding: 9px 8px 9px 0;
+      border-bottom: 1px solid rgba(45,51,72,0.5);
+      color: #cbd5e1;
+      vertical-align: top;
+      line-height: 1.4;
+    }
+    .plan-table tr:last-child td { border-bottom: none; }
+    .plan-table td:first-child { color: var(--accent2); font-weight: 700; white-space: nowrap; width: 36px; }
+    .plan-table .key-row td { color: #f1f5f9; }
+    .plan-table .key-row td:first-child { color: var(--gold); }
+    .plan-table .rest-row td { color: var(--muted); font-style: italic; }
+
+    .acc-note {
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+    .acc-note strong { color: #94a3b8; }
+
+    /* zone pills */
+    .zone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .zone-pill {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .zone-pill .zname { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .zone-pill .zbpm { font-size: 0.88rem; font-weight: 700; color: #f1f5f9; }
+    .zone-pill .zdesc { font-size: 0.68rem; color: var(--muted); margin-top: 2px; }
+    .z1 .zname { color: #38bdf8; } .z1 .zbpm { color: #7dd3fc; }
+    .z2 .zname { color: #4ade80; } .z2 .zbpm { color: #86efac; }
+    .z3 .zname { color: #fb923c; } .z3 .zbpm { color: #fdba74; }
+    .z4 .zname { color: #f87171; } .z4 .zbpm { color: #fca5a5; }
+    .z5 .zname { color: #e879f9; } .z5 .zbpm { color: #f0abfc; }
+
+    /* metrics table */
+    .metric-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(45,51,72,0.5);
+      font-size: 0.82rem;
+    }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-name { color: #94a3b8; flex-shrink: 0; width: 120px; font-size: 0.78rem; }
+    .metric-val { color: #f1f5f9; flex: 1; line-height: 1.5; }
+
+    /* red flags */
+    .flag-section { margin-bottom: 12px; }
+    .flag-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      padding: 4px 0;
+    }
+    .flag-title.red { color: #f87171; }
+    .flag-title.orange { color: #fb923c; }
+    .flag-title.yellow { color: var(--gold); }
+    .flag-list { display: flex; flex-direction: column; gap: 5px; }
+    .flag-item {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      padding: 7px 12px;
+      background: var(--bg3);
+      border-radius: 7px;
+      border-left: 3px solid;
+      line-height: 1.4;
+    }
+    .flag-item.red { border-color: #f87171; }
+    .flag-item.orange { border-color: #fb923c; }
+    .flag-item.yellow { border-color: var(--gold); }
+
+    /* week selector tabs */
+    .week-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .week-tab {
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--bg3);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .week-tab:hover { border-color: #3d4562; color: var(--text); }
+    .week-tab.active { background: rgba(79,110,247,0.15); border-color: rgba(79,110,247,0.4); color: var(--accent2); }
+
+    /* exercise cards */
+    .ex-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+    .ex-name { font-size: 0.85rem; font-weight: 700; color: #f1f5f9; margin-bottom: 4px; }
+    .ex-meta { font-size: 0.75rem; color: var(--muted); display: flex; gap: 12px; flex-wrap: wrap; }
+    .ex-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* ─── GALLERY ─── */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .gallery-grid .span2 { grid-column: span 2; }
+    .gallery-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      aspect-ratio: 4/3;
+      position: relative;
+    }
+    .gallery-item.tall { aspect-ratio: 3/4; }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .gallery-item img:hover { transform: scale(1.03); }
+    .gallery-item .placeholder-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      background: linear-gradient(135deg, #151b27, #1e2330);
+    }
+    .gallery-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 12px 10px;
+      background: linear-gradient(to top, rgba(15,17,23,0.85), transparent);
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-style: italic;
+    }
+
+    /* ─── UTILITY ─── */
+    .divider { height: 1px; background: var(--border); margin: 6px 0 14px; }
+    .small-note {
+      font-size: 0.73rem;
+      color: var(--muted);
+      line-height: 1.5;
+      padding: 10px 14px;
+      background: rgba(245,158,11,0.06);
+      border: 1px solid rgba(245,158,11,0.15);
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .small-note strong { color: var(--gold); }
+
+    .three-pillars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .pillar {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 10px;
+      text-align: center;
+    }
+    .pillar-num { font-size: 1.4rem; font-weight: 800; color: var(--accent2); margin-bottom: 4px; }
+    .pillar-text { font-size: 0.7rem; color: var(--muted); line-height: 1.4; }
+
+    /* hidden week blocks */
+    .week-block { display: none; }
+    .week-block.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="/">🏠 Hub</a>
+  <a href="/dane.html">📊 Dane</a>
+  <a href="/coach.html">🤖 Coach</a>
+  <a href="/cel.html" class="active">🎯 Cel</a>
+  <a href="https://n8n.nzr-hub.uk" target="_blank" rel="noopener">⚙️ n8n</a>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <img class="hero-img" src="CEL.png" alt="" loading="eager">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Architekt Wartości</div>
+    <div class="hero-title">Maraton<br><span>Warszawa 2027</span></div>
+
+    <div class="countdown-row">
+      <div class="cd-block">
+        <div class="cd-num" id="cd-d">—</div>
+        <div class="cd-label">dni</div>
+      </div>
+      <div class="cd-separator">:</div>
+      <div class="cd-block">
+        <div class="cd-num" id="cd-h">—</div>
+        <div class="cd-label">godz</div>
+      </div>
+      <div class="cd-separator">:</div>
+      <div class="cd-block">
+        <div class="cd-num" id="cd-m">—</div>
+        <div class="cd-label">min</div>
+      </div>
+    </div>
+
+    <div class="phase-bar-wrap">
+      <div class="phase-bar-label">
+        <span id="phase-label-text">Faza 1 — Baza i kolana</span>
+        <strong id="week-label-text">Tydzień 2 / 51</strong>
+      </div>
+      <div class="phase-track">
+        <div class="phase-fill" id="phase-fill" style="width:0%"></div>
+      </div>
+      <div class="phase-dots">
+        <span>Start</span>
+        <span>Faza 2</span>
+        <span>Faza 3</span>
+        <span>Start 🏁</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── PAGE ─── -->
+<div class="page">
+
+  <!-- CEL -->
+  <div class="section-hdr">
+    <h2>Cel główny</h2>
+    <span class="badge">28.04.2027</span>
+  </div>
+
+  <div class="goal-grid">
+    <div class="goal-card primary">
+      <div class="goal-tag">Cel A — główny</div>
+      <div class="goal-time">4:15–4:30</div>
+      <div class="goal-desc">Ukończyć maraton zdrowo. Pierwsze ukończenie jest większym sukcesem niż rekord na granicy ryzyka.</div>
+    </div>
+    <div class="goal-card stretch">
+      <div class="goal-tag">Cel B — stretch</div>
+      <div class="goal-time">sub 4:00</div>
+      <div class="goal-desc">5:41/km. Realny przy VO₂max 46. Decyzja zapada w lutym 2027 po teście 10 km.</div>
+    </div>
+  </div>
+
+  <div class="decision-card">
+    <strong>Test 10 km — luty 2027:</strong><br>
+    &lt;55 min → Cel B (sub-4:00) &nbsp;·&nbsp; 55–62 min → Cel A (4:15–4:30) &nbsp;·&nbsp; &gt;62 min → Cel A defensywny
+  </div>
+
+  <div class="three-pillars">
+    <div class="pillar">
+      <div class="pillar-num">①</div>
+      <div class="pillar-text">Baza aerobowa i ekonomia, nie objętość</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">②</div>
+      <div class="pillar-text">Protokół biodro–kolano 2×/tydzień</div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">③</div>
+      <div class="pillar-text">Gamifikacja + minima dla ADHD</div>
+    </div>
+  </div>
+
+  <!-- FAZY -->
+  <div class="section-hdr">
+    <h2>Plan faz</h2>
+  </div>
+
+  <div class="phase-timeline">
+    <div class="phase-item active" id="phase-1">
+      <div class="phase-num">1</div>
+      <div class="phase-info">
+        <div class="phase-name">Baza i kolana</div>
+        <div class="phase-meta">maj 2026 – październik 2026 · 24 tygodnie</div>
+      </div>
+      <span class="phase-badge badge-active">Aktywna</span>
+    </div>
+    <div class="phase-item" id="phase-2">
+      <div class="phase-num">2</div>
+      <div class="phase-info">
+        <div class="phase-name">Ojcostwo &amp; utrzymanie</div>
+        <div class="phase-meta">listopad 2026 – styczeń 2027 · 12 tygodni</div>
+      </div>
+      <span class="phase-badge badge-soon">Nadchodzi</span>
+    </div>
+    <div class="phase-item" id="phase-3">
+      <div class="phase-num">3</div>
+      <div class="phase-info">
+        <div class="phase-name">Specyfika maratońska</div>
+        <div class="phase-meta">luty 2027 – kwiecień 2027 · 12 tygodni</div>
+      </div>
+      <span class="phase-badge badge-soon">Nadchodzi</span>
+    </div>
+    <div class="phase-item" id="phase-4">
+      <div class="phase-num">4</div>
+      <div class="phase-info">
+        <div class="phase-name">Taper + Warszawa 🏁</div>
+        <div class="phase-meta">kwiecień/maj 2027 · 3 tygodnie</div>
+      </div>
+      <span class="phase-badge badge-soon">Finał</span>
+    </div>
+  </div>
+
+  <!-- AKTUALNY TYDZIEŃ -->
+  <div class="section-hdr">
+    <h2>Plan tygodniowy</h2>
+    <span class="badge" id="current-week-badge">Tydzień 2</span>
+  </div>
+
+  <div class="week-tabs" id="week-tabs">
+    <button class="week-tab active" onclick="showWeek('1-4', this)">Tyg. 1–4</button>
+    <button class="week-tab" onclick="showWeek('5-8', this)">Tyg. 5–8</button>
+    <button class="week-tab" onclick="showWeek('9-12', this)">Tyg. 9–12</button>
+    <button class="week-tab" onclick="showWeek('13-16', this)">Tyg. 13–16</button>
+    <button class="week-tab" onclick="showWeek('17-20', this)">Tyg. 17–20</button>
+    <button class="week-tab" onclick="showWeek('21-24', this)">Tyg. 21–24</button>
+  </div>
+
+  <div class="week-block visible" id="wb-1-4">
+    <div class="small-note"><strong>Adaptacja, nauka kadencji</strong> — maj 2026. Cel: przyzwyczaić stawy do ruchu, metronom 170 spm w fazach biegu.</div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem (60 s bieg / 90 s marsz, kadencja 170 spm)</td><td>30 min</td></tr>
+        <tr><td>Wt</td><td>Bieg ciągły Z2 (z metronomem 172 spm)</td><td>25 min</td></tr>
+        <tr><td>Śr</td><td>Siła kolan + bioder (Sesja A)</td><td>25 min</td></tr>
+        <tr><td>Czw</td><td>Marszobieg z psem (60 s / 90 s)</td><td>30 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off lub yoga 15 min</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2 (run-walk 5 min bieg / 1 min marsz)</td><td>35 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem</td><td>30 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-block" id="wb-5-8">
+    <div class="small-note"><strong>Wydłużanie biegu Z2</strong> — czerwiec 2026. Kadencja 173 spm, proporcja marszobieg się odwraca.</div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem (90 s / 60 s)</td><td>35 min</td></tr>
+        <tr><td>Wt</td><td>Bieg ciągły Z2 (kadencja 173 spm)</td><td>30 min</td></tr>
+        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
+        <tr><td>Czw</td><td>Marszobieg z psem (90 s / 60 s)</td><td>35 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2 (run-walk 7 min / 1 min)</td><td>45–50 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem</td><td>30–40 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2,5 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-block" id="wb-9-12">
+    <div class="small-note"><strong>Wprowadzenie tempa</strong> — lipiec 2026. Pierwsze interwały Z3. <strong>Tydzień 12 = deload (−30%)</strong>.</div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem Z1-Z2</td><td>35 min</td></tr>
+        <tr class="key-row"><td>Wt</td><td>Tempo: 3 × 3 min @ Z3 / 2 min jog</td><td>30 min</td></tr>
+        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
+        <tr><td>Czw</td><td>Bieg ciągły Z2</td><td>30 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off lub spacer</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2 ciągły</td><td>60 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem</td><td>30–40 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~2,75 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-block" id="wb-13-16">
+    <div class="small-note"><strong>Konsolidacja, kadencja 175 spm</strong> — sierpień 2026. Dochodzi Sesja B siłowa (2 dni siłowe/tydzień).</div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
+        <tr class="key-row"><td>Wt</td><td>Tempo: 4 × 3 min @ Z3 / 2 min jog</td><td>35 min</td></tr>
+        <tr><td>Śr</td><td>Siła Sesja A + Sesja B</td><td>25 min</td></tr>
+        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>35 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>65–75 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem</td><td>40 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~3,5 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-block" id="wb-17-20">
+    <div class="small-note"><strong>Pierwsze 90 min</strong> — wrzesień 2026. Long bieg osiąga 90 minut. Interwały wydłużają się do 2 × 8 min.</div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
+        <tr class="key-row"><td>Wt</td><td>Tempo: 2 × 8 min @ Z3 / 3 min jog</td><td>40 min</td></tr>
+        <tr><td>Śr</td><td>Siła Sesja A + B</td><td>25+25 min</td></tr>
+        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>40 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>75–90 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem</td><td>40 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~4 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="week-block" id="wb-21-24">
+    <div class="small-note"><strong>Peak Faza 1</strong> — październik 2026. 25 min ciągłe @ Z3. Long bieg 90–100 min. <strong>Tydzień 24 = deload przed Fazą 2.</strong></div>
+    <table class="plan-table">
+      <thead><tr><th>Dzień</th><th>Sesja</th><th>Czas</th></tr></thead>
+      <tbody>
+        <tr><td>Pon</td><td>Marszobieg z psem</td><td>40 min</td></tr>
+        <tr class="key-row"><td>Wt</td><td>Tempo: 25 min ciągłe @ Z3</td><td>45 min</td></tr>
+        <tr><td>Śr</td><td>Siła Sesja A</td><td>25 min</td></tr>
+        <tr><td>Czw</td><td>Bieg Z2 ciągły</td><td>45 min</td></tr>
+        <tr class="rest-row"><td>Pt</td><td>Off lub Z1 marsz</td><td>—</td></tr>
+        <tr class="key-row"><td>Sb</td><td>Long Z2</td><td>90–100 min</td></tr>
+        <tr><td>Nd</td><td>Marsz z psem + Siła B</td><td>40+20 min</td></tr>
+        <tr><td colspan="2" style="color:var(--accent2);font-size:0.78rem;padding-top:10px;">Suma biegania tygodniowo</td><td style="color:var(--accent2);font-weight:700;">~4,5 h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ACCORDIONY -->
+  <div class="section-hdr">
+    <h2>Szczegóły planu</h2>
+  </div>
+
+  <!-- Strefy HR -->
+  <details>
+    <summary>
+      <span class="sum-left"><span class="sum-icon">💓</span> Strefy tętna</span>
+    </summary>
+    <div class="acc-body">
+      <div class="acc-note" style="margin-bottom:12px;"><strong>Z dawką MPH (Atenza):</strong> dodaj ~10 BPM do każdej strefy. Treningi rano przed dawką = niższe HR.</div>
+      <div class="zone-grid">
+        <div class="zone-pill z1"><div class="zname">Z1 — Regeneracja</div><div class="zbpm">&lt;130 BPM</div><div class="zdesc">Marsz, marszobieg z psem</div></div>
+        <div class="zone-pill z2"><div class="zname">Z2 — Baza</div><div class="zbpm">138–152 BPM</div><div class="zdesc">Większość biegów. Pełne zdania.</div></div>
+        <div class="zone-pill z3"><div class="zname">Z3 — Tempo / MP</div><div class="zbpm">153–164 BPM</div><div class="zdesc">Interwały, tempo runsy</div></div>
+        <div class="zone-pill z4"><div class="zname">Z4 — Próg</div><div class="zbpm">165–172 BPM</div><div class="zdesc">Próg mleczanowy, krótko</div></div>
+        <div class="zone-pill z5"><div class="zname">Z5 — VO₂max</div><div class="zbpm">173–180 BPM</div><div class="zdesc">Sporadycznie. Sufit: 175 BPM.</div></div>
+      </div>
+      <div class="acc-note" style="margin-top:12px;"><strong>Twardy sufit:</strong> alarm Garmin przy 175 BPM. Jeśli >175 BPM przez 3 min → marsz aż HR &lt;160.</div>
+    </div>
+  </details>
+
+  <!-- Protokół kolan -->
+  <details>
+    <summary>
+      <span class="sum-left"><span class="sum-icon">🦵</span> Protokół kolan — ćwiczenia</span>
+    </summary>
+    <div class="acc-body">
+      <div class="acc-note" style="margin-bottom:12px;"><strong>Sesja A</strong> — 2×/tydzień przez całą Fazę 1. Niezbywalny element planu.</div>
+      <div class="ex-card"><div class="ex-name">Glute bridge</div><div class="ex-meta"><span>🎯 Wyprost biodra</span><span>📋 3 × 12</span><span>📈 T6: jednonóż</span></div></div>
+      <div class="ex-card"><div class="ex-name">Clamshell z gumą</div><div class="ex-meta"><span>🎯 Gluteus medius</span><span>📋 3 × 15/strona</span><span>📈 + opór gumy</span></div></div>
+      <div class="ex-card"><div class="ex-name">Banded lateral walk</div><div class="ex-meta"><span>🎯 Kontrola valgus</span><span>📋 3 × 12 kroków/stronę</span><span>📈 szerszy krok</span></div></div>
+      <div class="ex-card"><div class="ex-name">Bulgarian split squat</div><div class="ex-meta"><span>🎯 Siła + stabilność</span><span>📋 3 × 8/nogę</span><span>📈 hantle 10 kg</span></div></div>
+      <div class="ex-card"><div class="ex-name">Calf raise</div><div class="ex-meta"><span>🎯 Achilles + soleus</span><span>📋 3 × 15</span><span>📈 jednonóż</span></div></div>
+
+      <div class="divider"></div>
+      <div class="acc-note" style="margin-bottom:12px;"><strong>Sesja B</strong> — od tygodnia 13. 20 minut.</div>
+      <div class="ex-card"><div class="ex-name">Step-up</div><div class="ex-meta"><span>📋 3 × 10/nogę</span></div></div>
+      <div class="ex-card"><div class="ex-name">Single-leg RDL</div><div class="ex-meta"><span>📋 3 × 8/nogę</span></div></div>
+      <div class="ex-card"><div class="ex-name">Wall sit</div><div class="ex-meta"><span>📋 3 × 30–60 s</span></div></div>
+      <div class="ex-card"><div class="ex-name">Plank</div><div class="ex-meta"><span>📋 3 × 30–60 s</span></div></div>
+
+      <div class="divider"></div>
+      <div class="acc-note"><strong>Kadencja — protokół zmiany:</strong><br>
+        Etap 1 (maj, T1–4): 170 spm, sesje ≤30 min<br>
+        Etap 2 (cze, T5–8): 172 spm, sesje ≤45 min<br>
+        Etap 3 (lip, T9–12): 173–175 spm, wszystkie poza long<br>
+        Etap 4 (sie+): 175–178 spm wszędzie
+      </div>
+    </div>
+  </details>
+
+  <!-- Wskaźniki postępu -->
+  <details>
+    <summary>
+      <span class="sum-left"><span class="sum-icon">📈</span> Wskaźniki postępu</span>
+    </summary>
+    <div class="acc-body">
+      <div class="metric-row"><div class="metric-name">Tempo @ HR 140</div><div class="metric-val">7:30/km (maj 2026) → 6:30/km (paź 2026) → 5:50/km (kwi 2027)</div></div>
+      <div class="metric-row"><div class="metric-name">HRV 7-dniowe</div><div class="metric-val">≥75 ms &nbsp;·&nbsp; alarm &lt;65 ms</div></div>
+      <div class="metric-row"><div class="metric-name">RHR</div><div class="metric-val">45–55 BPM &nbsp;·&nbsp; alarm &gt;60 przez 3 dni</div></div>
+      <div class="metric-row"><div class="metric-name">Kadencja</div><div class="metric-val">144 → 175–180 spm</div></div>
+      <div class="metric-row"><div class="metric-name">VO₂max</div><div class="metric-val">46 → 50 (paź 2026) → 53 (kwi 2027)</div></div>
+      <div class="metric-row"><div class="metric-name">Magic Mile</div><div class="metric-val">paź 2026: ~7:00 &nbsp;·&nbsp; lut 2027: ~6:00 &nbsp;·&nbsp; kwi 2027: ~5:35</div></div>
+      <div class="metric-row"><div class="metric-name">Test 10 km</div><div class="metric-val">lut 2027 — &lt;55 min = cel B &nbsp;·&nbsp; 55–62 min = cel A</div></div>
+      <div class="metric-row"><div class="metric-name">Półmaraton</div><div class="metric-val">mar 2027 — &lt;1:55 = cel B &nbsp;·&nbsp; 1:55–2:10 = cel A</div></div>
+    </div>
+  </details>
+
+  <!-- ADHD + MPH -->
+  <details>
+    <summary>
+      <span class="sum-left"><span class="sum-icon">⚡</span> Zasady ADHD i Atenza</span>
+    </summary>
+    <div class="acc-body">
+      <div class="acc-note" style="margin-bottom:10px;"><strong>Minima zamiast targetów:</strong> 2 biegi + 1 siła + 3 marsze z psem = minimum tygodniowe. Deload co 4 tyg. to wbudowana decyzja, nie porażka.</div>
+      <div class="flag-list">
+        <div class="flag-item yellow">🧠 Reguła 5 minut: załóż buty i wyjdź. Aktywacja dopaminergiczna pojawia się po starcie ruchu.</div>
+        <div class="flag-item yellow">📊 HRV-guided: jeśli HRV &lt;65 ms → tylko marsz z psem, bez presji.</div>
+        <div class="flag-item yellow">🌡️ Atenza + upał: unikaj biegów >60 min między 11:00–19:00 od maja do września. Wolny dzień przy &gt;28°C.</div>
+        <div class="flag-item yellow">💧 Nawodnienie przed biegiem: 300–500 ml. >75 min: 400–600 ml/h + 30–60 g węglowodanów/h.</div>
+        <div class="flag-item yellow">⏰ Optymalny czas treningu: rano przed dawką (niższe HR) lub wieczorem ≥10h po dawce.</div>
+      </div>
+      <div class="acc-note" style="margin-top:10px;"><strong>Reguła 2 z 3 (od stycznia 2027):</strong> Sen ≥5h + HRV ≥70 ms + brak konfliktu z partnerką → biegasz. Inaczej = marsz z psem.</div>
+    </div>
+  </details>
+
+  <!-- Red flags -->
+  <details>
+    <summary>
+      <span class="sum-left"><span class="sum-icon">🚨</span> Red flags — kiedy stop</span>
+    </summary>
+    <div class="acc-body">
+      <div class="flag-section">
+        <div class="flag-title red">🛑 STOP — kardiolog natychmiast</div>
+        <div class="flag-list">
+          <div class="flag-item red">Ból w klatce piersiowej podczas lub po biegu</div>
+          <div class="flag-item red">Omdlenie lub stan przedomdleniowy</div>
+          <div class="flag-item red">HR spoczynkowy &gt;75 lub &lt;40 przez 3+ dni</div>
+          <div class="flag-item red">HR podczas biegu &gt;185 lub niewspółmiernie do tempa</div>
+          <div class="flag-item red">Nieregularny rytm (alert Garmin)</div>
+          <div class="flag-item red">Duszność nieproporcjonalna do wysiłku</div>
+        </div>
+      </div>
+      <div class="flag-section">
+        <div class="flag-title orange">⚠️ STOP — ortopeda</div>
+        <div class="flag-list">
+          <div class="flag-item orange">Ból kolana &gt;3/10 przez 48h lub narastający w biegu</div>
+          <div class="flag-item orange">Obrzęk, zaczerwienienie, ocieplenie kolana</div>
+          <div class="flag-item orange">Objaw blokady, uciekania lub kliknięcia z bólem</div>
+        </div>
+      </div>
+      <div class="flag-section">
+        <div class="flag-title yellow">⏸️ Pauza 1–2 tygodnie</div>
+        <div class="flag-list">
+          <div class="flag-item yellow">HRV 7-dniowe spadło &gt;25% od baseliny (z 82 → poniżej 62)</div>
+          <div class="flag-item yellow">3 noce &lt;5h snu pod rząd</div>
+          <div class="flag-item yellow">Przeziębienie z gorączką</div>
+          <div class="flag-item yellow">Każdy easy bieg jest ciężki przez 5 dni</div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- GALERIA -->
+  <div class="section-hdr">
+    <h2>Architekt Wartości</h2>
+    <span class="badge">Misja</span>
+  </div>
+
+  <div class="gallery-grid">
+    <!-- Wrzuć grafiki do folderu site/ i zmień src poniżej -->
+    <!-- 1.png — najważniejsza, duża -->
+    <div class="gallery-item span2">
+      <img src="1.png" alt="Architekt Wartości" loading="lazy">
+      <div class="gallery-caption">Architekt Wartości — blueprint maratonu</div>
+    </div>
+    <!-- 2.png -->
+    <div class="gallery-item">
+      <img src="2.png" alt="" loading="lazy">
+    </div>
+    <!-- 4.png — czwarty priorytet, mała -->
+    <div class="gallery-item">
+      <img src="4.png" alt="" loading="lazy">
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ─── COUNTDOWN ───
+(function() {
+  const target = new Date(2027, 3, 28, 9, 0, 0); // 28.04.2027 09:00
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const now = new Date();
+    const diff = target - now;
+    if (diff <= 0) {
+      document.getElementById('cd-d').textContent = '0';
+      document.getElementById('cd-h').textContent = '00';
+      document.getElementById('cd-m').textContent = '00';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    document.getElementById('cd-d').textContent = d;
+    document.getElementById('cd-h').textContent = pad(h);
+    document.getElementById('cd-m').textContent = pad(m);
+  }
+  tick();
+  setInterval(tick, 30000);
+})();
+
+// ─── PHASE + WEEK PROGRESS ───
+(function() {
+  const planStart = new Date(2026, 4, 19); // 2026-05-19, lokalnie
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const msPerWeek = 7 * 24 * 3600 * 1000;
+  const weekNum = Math.max(1, Math.ceil((today - planStart) / msPerWeek));
+
+  // total weeks to marathon: ~51
+  const totalWeeks = 51;
+  const pct = Math.min(100, (weekNum / totalWeeks) * 100);
+
+  document.getElementById('phase-fill').style.width = pct.toFixed(1) + '%';
+  document.getElementById('week-label-text').textContent = 'Tydzień ' + weekNum + ' / ' + totalWeeks;
+  document.getElementById('current-week-badge').textContent = 'Tydzień ' + weekNum;
+
+  // phase label
+  let phaseText = 'Faza 1 — Baza i kolana';
+  if (weekNum > 36) phaseText = 'Faza 3 — Specyfika maratońska';
+  else if (weekNum > 24) phaseText = 'Faza 2 — Ojcostwo & utrzymanie';
+  else if (weekNum > 48) phaseText = 'Faza 4 — Taper';
+  document.getElementById('phase-label-text').textContent = phaseText;
+
+  // highlight correct phase in timeline
+  const phaseNum = weekNum <= 24 ? 1 : weekNum <= 36 ? 2 : weekNum <= 48 ? 3 : 4;
+  for (let i = 1; i <= 4; i++) {
+    const el = document.getElementById('phase-' + i);
+    el.classList.remove('active', 'done');
+    if (i < phaseNum) el.classList.add('done');
+    else if (i === phaseNum) el.classList.add('active');
+  }
+
+  // auto-select correct week tab
+  const tabMap = [
+    [1, 4, '1-4'], [5, 8, '5-8'], [9, 12, '9-12'],
+    [13, 16, '13-16'], [17, 20, '17-20'], [21, 51, '21-24']
+  ];
+  for (const [from, to, id] of tabMap) {
+    if (weekNum >= from && weekNum <= to) {
+      showWeek(id, document.querySelector(`[onclick="showWeek('${id}', this)"]`));
+      break;
+    }
+  }
+})();
+
+// ─── WEEK TAB SWITCHER ───
+function showWeek(id, btn) {
+  document.querySelectorAll('.week-block').forEach(el => el.classList.remove('visible'));
+  document.querySelectorAll('.week-tab').forEach(el => el.classList.remove('active'));
+  const block = document.getElementById('wb-' + id);
+  if (block) block.classList.add('visible');
+  if (btn) btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
