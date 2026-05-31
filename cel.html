@@ -9,7 +9,7 @@
 
     :root {
       --bg: #0f1117;
-      --bg2: #1e2330;
+      --bg2: rgba(30,35,48,0.88);
       --bg3: #151b27;
       --border: #2d3348;
       --text: #e2e8f0;
@@ -582,30 +582,23 @@
     .week-block { display: none; }
     .week-block.visible { display: block; }
 
-    /* BG IMAGE SECTIONS */
-    .img-bg {
-      position: relative;
-      margin: 0 -16px;
-      padding: 0 16px 4px;
-      overflow: hidden;
-    }
-    .img-bg::before {
-      content: '';
-      position: absolute;
+    /* FIXED BG */
+    .bg-fixed {
+      position: fixed;
       inset: 0;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: 0.08;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.10;
       pointer-events: none;
       z-index: 0;
     }
-    .img-bg > * { position: relative; z-index: 1; }
-    .img-bg-1::before { background-image: url('1.png'); }
-    .img-bg-2::before { background-image: url('2.png'); }
   </style>
 </head>
 <body>
+
+<img class="bg-fixed" src="2.png" alt="">
 
 <nav class="topnav">
   <a href="/">🏠 Hub</a>
@@ -701,7 +694,7 @@
   </div>
 
   <!-- FAZY -->
-  <div class="img-bg img-bg-2">
+  <div>
   <div class="section-hdr">
     <h2>Plan faz</h2>
   </div>
@@ -743,7 +736,7 @@
   </div><!-- /img-bg-2 -->
 
   <!-- KATALOG SESJI -->
-  <div class="img-bg img-bg-1">
+  <div>
   <div class="section-hdr" style="padding-top:28px">
     <h2>Katalog sesji</h2>
     <span class="badge" id="current-week-badge">Tydzień 2</span>
