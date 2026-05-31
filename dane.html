@@ -13,12 +13,13 @@
       background: #0f1117;
       color: #e2e8f0;
       min-height: 100vh;
-      padding: 0 0 40px;
+      padding-bottom: 40px;
     }
 
     /* NAV */
     .topnav {
       display: flex;
+      align-items: center;
       gap: 4px;
       padding: 12px 16px;
       border-bottom: 1px solid #2d3348;
@@ -36,9 +37,8 @@
       border-radius: 8px;
       transition: background 0.15s, color 0.15s;
     }
-    .topnav a:hover { background: #1e2330; color: #f1f5f9; }
-    .topnav a.active { background: #1e2330; color: #f1f5f9; }
-    .topnav .spacer { flex: 1; }
+    .topnav a:hover, .topnav a.active { background: #1e2330; color: #f1f5f9; }
+    .spacer { flex: 1; }
     .refresh-btn {
       background: none;
       border: 1px solid #2d3348;
@@ -48,48 +48,48 @@
       padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      transition: background 0.15s, color 0.15s;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
-    .refresh-btn:hover { background: #1e2330; color: #f1f5f9; border-color: #3d4562; }
-    .refresh-btn.loading { opacity: 0.5; cursor: not-allowed; }
-    .refresh-btn .spin { display: inline-block; }
-    .refresh-btn.loading .spin { animation: spin 1s linear infinite; }
+    .refresh-btn:hover { background: #1e2330; color: #f1f5f9; }
+    .refresh-btn.loading { opacity: 0.5; pointer-events: none; }
+    .refresh-btn.loading .spin { animation: spin 1s linear infinite; display: inline-block; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* LAYOUT */
     .page { max-width: 520px; margin: 0 auto; padding: 20px 16px 0; }
-
+    .meta { font-size: 0.75rem; color: #475569; margin-bottom: 16px; }
     .section-title {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-size: 0.72rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: #64748b; margin-bottom: 12px;
+    }
+    .card { background: #1e2330; border: 1px solid #2d3348; border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+
+    /* TABS + KARUZELA */
+    .carousel-wrap { margin-bottom: 16px; }
+    .tabs {
+      display: flex; gap: 4px; margin-bottom: 10px;
+    }
+    .tab {
+      flex: 1; text-align: center;
+      padding: 7px 4px;
+      font-size: 0.78rem; font-weight: 500;
       color: #64748b;
-      margin-bottom: 10px;
-    }
-
-    .card {
-      background: #1e2330;
+      background: #161b27;
       border: 1px solid #2d3348;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      user-select: none;
     }
-
-    /* KARUZELA */
-    .carousel-wrap {
-      position: relative;
-      margin-bottom: 16px;
-    }
+    .tab.active { background: #1e2330; color: #f1f5f9; border-color: #60a5fa; }
     .carousel {
-      display: flex;
-      overflow-x: scroll;
+      display: flex; overflow-x: scroll;
       scroll-snap-type: x mandatory;
-      gap: 12px;
-      scrollbar-width: none;
+      gap: 12px; scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
     }
     .carousel::-webkit-scrollbar { display: none; }
@@ -101,194 +101,94 @@
       border-radius: 14px;
       padding: 20px;
     }
-    .tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-    .tab {
-      flex: 1;
-      text-align: center;
-      padding: 7px 4px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: #64748b;
-      background: #161b27;
-      border: 1px solid #2d3348;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      user-select: none;
-    }
-    .tab.active {
-      background: #1e2330;
-      color: #f1f5f9;
-      border-color: #60a5fa;
-    }
 
     /* SLIDE 1 — STATUS */
-    .status-top {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .status-emoji { font-size: 3rem; line-height: 1; }
-    .status-text .label {
-      font-size: 0.75rem;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 2px;
-    }
-    .status-text .value {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #f1f5f9;
-    }
-    .status-comment {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    .metrics-pills {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-    }
-    .pill {
-      background: #161b27;
-      border-radius: 10px;
-      padding: 10px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .pill .p-label { font-size: 0.7rem; color: #64748b; }
+    .status-top { display: flex; align-items: center; gap: 16px; margin-bottom: 14px; }
+    .status-emoji { font-size: 2.8rem; line-height: 1; }
+    .status-label { font-size: 0.72rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px; }
+    .status-value { font-size: 1.15rem; font-weight: 700; }
+    .status-comment { font-size: 0.83rem; color: #94a3b8; line-height: 1.55; margin-bottom: 16px; }
+    .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .pill { background: #161b27; border-radius: 10px; padding: 10px 12px; }
+    .pill .p-label { font-size: 0.68rem; color: #64748b; margin-bottom: 2px; }
     .pill .p-value { font-size: 1rem; font-weight: 600; }
-    .pill.green .p-value { color: #4ade80; }
-    .pill.yellow .p-value { color: #facc15; }
-    .pill.red .p-value { color: #f87171; }
-    .pill.dim .p-value { color: #475569; }
+    .c-green { color: #4ade80; } .c-yellow { color: #facc15; } .c-red { color: #f87171; } .c-dim { color: #475569; }
 
     /* SLIDE 2 — 7 DNI */
-    .week-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-    .week-table th {
-      text-align: left;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #64748b;
-      padding: 0 6px 8px 0;
-    }
-    .week-table td {
-      padding: 7px 6px 7px 0;
+    .week-row {
+      display: flex; align-items: center;
+      padding: 9px 0;
       border-top: 1px solid #2d3348;
-      color: #cbd5e1;
-      vertical-align: middle;
+      gap: 10px;
     }
-    .week-table tr:first-child td { border-top: none; }
-    .wt-green { color: #4ade80; }
-    .wt-yellow { color: #facc15; }
-    .wt-red { color: #f87171; }
-    .wt-dim { color: #475569; }
-    .training-badge {
-      display: inline-block;
-      font-size: 0.9rem;
-    }
+    .week-row:first-child { border-top: none; }
+    .week-date { font-size: 0.78rem; color: #64748b; width: 36px; flex-shrink: 0; }
+    .week-icon { font-size: 1.2rem; width: 26px; text-align: center; flex-shrink: 0; }
+    .week-info { flex: 1; }
+    .week-info .wi-name { font-size: 0.82rem; color: #f1f5f9; font-weight: 500; }
+    .week-info .wi-sub { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
+    .week-intensity { width: 60px; flex-shrink: 0; }
+    .intensity-bar { height: 5px; border-radius: 3px; margin-top: 2px; }
+    .intensity-label { font-size: 0.65rem; color: #64748b; }
 
     /* SLIDE 3 — TABELA ZDROWIA */
-    .health-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
+    .health-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
     .health-table th {
-      text-align: left;
-      font-size: 0.68rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #64748b;
-      padding: 0 6px 8px 6px;
+      text-align: left; font-size: 0.68rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: #64748b; padding: 0 6px 8px 0;
     }
-    .health-table td {
-      padding: 8px 6px;
-      border-top: 1px solid #2d3348;
-      color: #cbd5e1;
-    }
+    .health-table td { padding: 7px 6px 7px 0; border-top: 1px solid #2d3348; color: #cbd5e1; }
     .health-table tr:first-child td { border-top: none; }
-    td.g { color: #4ade80; }
-    td.y { color: #facc15; }
-    td.r { color: #f87171; }
-    td.d { color: #475569; }
+    .g { color: #4ade80; } .y { color: #facc15; } .r { color: #f87171; } .d { color: #475569; }
 
     /* TRENINGI */
-    .trening-item {
-      border-top: 1px solid #2d3348;
-      padding: 12px 0;
-    }
+    .trening-item { border-top: 1px solid #2d3348; padding: 12px 0; }
     .trening-item:first-child { border-top: none; padding-top: 0; }
-    .trening-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      user-select: none;
+    .trening-header { display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; }
+    .tr-icon { font-size: 1.3rem; width: 28px; text-align: center; }
+    .tr-main { flex: 1; }
+    .tr-main .typ { font-weight: 600; font-size: 0.88rem; color: #f1f5f9; }
+    .tr-main .sub { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
+    .tr-date { font-size: 0.75rem; color: #64748b; }
+    .arrow { font-size: 0.8rem; color: #475569; transition: transform 0.2s; }
+    .trening-item.open .arrow { transform: rotate(180deg); }
+    .tr-details {
+      display: none; margin-top: 12px;
+      padding: 12px; background: #161b27; border-radius: 10px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
-    .trening-icon { font-size: 1.3rem; width: 28px; text-align: center; }
-    .trening-main { flex: 1; }
-    .trening-main .typ { font-weight: 600; font-size: 0.88rem; color: #f1f5f9; }
-    .trening-main .sub { font-size: 0.75rem; color: #64748b; margin-top: 2px; }
-    .trening-right { text-align: right; font-size: 0.75rem; color: #64748b; }
-    .expand-arrow {
-      font-size: 0.8rem;
-      color: #475569;
-      transition: transform 0.2s;
-    }
-    .trening-item.open .expand-arrow { transform: rotate(180deg); }
-    .trening-details {
-      display: none;
-      margin-top: 12px;
-      padding: 12px;
-      background: #161b27;
-      border-radius: 10px;
-      gap: 8px;
-    }
-    .trening-item.open .trening-details { display: grid; grid-template-columns: 1fr 1fr; }
-    .detail-item .d-label { font-size: 0.68rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
-    .detail-item .d-value { font-size: 0.9rem; color: #e2e8f0; font-weight: 500; margin-top: 2px; }
+    .trening-item.open .tr-details { display: grid; }
+    .d-item .d-label { font-size: 0.67rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+    .d-item .d-value { font-size: 0.88rem; color: #e2e8f0; font-weight: 500; margin-top: 2px; }
 
-    /* WYKRES */
+    /* WYKRESY */
+    .chart-tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+    .chart-tab {
+      flex: 1; text-align: center; padding: 6px 4px;
+      font-size: 0.75rem; font-weight: 500; color: #64748b;
+      background: #161b27; border: 1px solid #2d3348; border-radius: 8px;
+      cursor: pointer; transition: all 0.15s; user-select: none;
+    }
+    .chart-tab.active { background: #1e2330; color: #f1f5f9; border-color: #60a5fa; }
+    .chart-panel { display: none; }
+    .chart-panel.active { display: block; }
     .chart-wrap { position: relative; height: 200px; }
-
-    /* META */
-    .meta { font-size: 0.75rem; color: #475569; margin-bottom: 20px; }
-
-    .loading { color: #64748b; text-align: center; padding: 40px; font-size: 0.9rem; }
 
     /* TOAST */
     .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
+      position: fixed; bottom: 24px; left: 50%;
       transform: translateX(-50%) translateY(80px);
-      background: #1e2330;
-      border: 1px solid #2d3348;
-      border-radius: 10px;
-      padding: 10px 18px;
-      font-size: 0.82rem;
-      color: #94a3b8;
-      transition: transform 0.3s;
-      z-index: 999;
+      background: #1e2330; border: 1px solid #2d3348;
+      border-radius: 10px; padding: 10px 18px;
+      font-size: 0.82rem; color: #94a3b8;
+      transition: transform 0.3s; z-index: 999;
+      white-space: nowrap;
     }
     .toast.show { transform: translateX(-50%) translateY(0); }
+
+    .loading { color: #64748b; text-align: center; padding: 48px; }
   </style>
 </head>
 <body>
@@ -310,174 +210,218 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const API   = 'https://n8n.nzr-hub.uk/webhook/dane';
+const API     = 'https://n8n.nzr-hub.uk/webhook/dane';
 const REFRESH = 'https://n8n.nzr-hub.uk/webhook/refresh';
 
-// Progi dopasowane do danych użytkownika
+// ── PROGI (dopasowane do danych użytkownika) ──────────────────────────
 const T = {
-  hrv:  { green: 82, yellow: 72 },   // ≥82 zielony, 72-81 żółty, <72 czerwony
-  rhr:  { green: 51, yellow: 54 },   // ≤51 zielony, 52-54 żółty, ≥55 czerwony
-  sen:  { green: 7,  yellow: 6  },   // ≥7 zielony, 6-6.9 żółty, <6 czerwony
-  bb:   { green: 80, yellow: 60 },   // ≥80 zielony, 60-79 żółty, <60 czerwony
+  hrv:  { green: 82, yellow: 72 },
+  rhr:  { green: 51, yellow: 54 },
+  sen:  { green: 7,  yellow: 6  },
+  bb:   { green: 80, yellow: 60 },
 };
 
+// ── SŁOWNIKI ─────────────────────────────────────────────────────────
 const ICONS = { running:'🏃', strength_training:'💪', yoga:'🧘', cycling:'🚴', swimming:'🏊' };
 const TYPY  = { running:'Bieganie', strength_training:'Siłownia', yoga:'Joga', cycling:'Rower', swimming:'Pływanie' };
-
 function icon(t) { return ICONS[t] || '🏋️'; }
 function typ(t)  { return TYPY[t]  || t; }
 
-// Klasy kolorów
-function cHRV(v) {
-  if (v === null) return 'dim';
-  return v >= T.hrv.green ? 'green' : v >= T.hrv.yellow ? 'yellow' : 'red';
-}
-function cRHR(v) {
-  if (v === null) return 'dim';
-  return v <= T.rhr.green ? 'green' : v <= T.rhr.yellow ? 'yellow' : 'red';
-}
-function cSen(v) {
-  if (v === null) return 'dim';
-  return v >= T.sen.green ? 'green' : v >= T.sen.yellow ? 'yellow' : 'red';
-}
-function cBB(v) {
-  if (v === null) return 'dim';
-  return v >= T.bb.green ? 'green' : v >= T.bb.yellow ? 'yellow' : 'red';
+// ── KOLORY ───────────────────────────────────────────────────────────
+const COL = { green:'#4ade80', yellow:'#facc15', red:'#f87171', dim:'#475569' };
+
+function cHRV(v) { if(!v) return 'dim'; return v>=T.hrv.green?'green':v>=T.hrv.yellow?'yellow':'red'; }
+function cRHR(v) { if(!v) return 'dim'; return v<=T.rhr.green?'green':v<=T.rhr.yellow?'yellow':'red'; }
+function cSen(v) { if(!v) return 'dim'; return v>=T.sen.green?'green':v>=T.sen.yellow?'yellow':'red'; }
+function cBB(v)  { if(!v) return 'dim'; return v>=T.bb.green?'green':v>=T.bb.yellow?'yellow':'red'; }
+
+// ── SCORE (0–2 per metryka) ───────────────────────────────────────────
+function s(col) { return col==='green'?2:col==='yellow'?1:col==='red'?0:null; }
+
+// ── KONDYCJA COMPOSITE (0–100) ────────────────────────────────────────
+// HRV*0.4 + RHR_inv*0.3 + BB*0.3 — każde znormalizowane do zakresu użytkownika
+function kondycjaScore(hrv, rhr, bb) {
+  const hMin=60, hMax=100;
+  const rMin=45, rMax=65;
+  const bMin=0,  bMax=100;
+  const hN = hrv!=null ? Math.max(0, Math.min(100, (hrv-hMin)/(hMax-hMin)*100)) : null;
+  const rN = rhr!=null ? Math.max(0, Math.min(100, (rMax-rhr)/(rMax-rMin)*100)) : null;
+  const bN = bb !=null ? Math.max(0, Math.min(100, (bb-bMin)/(bMax-bMin)*100))  : null;
+  const vals=[]; const ws=[];
+  if(hN!=null){vals.push(hN*0.4); ws.push(0.4);}
+  if(rN!=null){vals.push(rN*0.3); ws.push(0.3);}
+  if(bN!=null){vals.push(bN*0.3); ws.push(0.3);}
+  if(!vals.length) return null;
+  const wSum=ws.reduce((a,b)=>a+b,0);
+  return Math.round(vals.reduce((a,b)=>a+b,0)/wSum*100)/100;
 }
 
-// Punkty (0=czerwony, 1=żółty, 2=zielony)
-function scoreHRV(v) { if(!v) return null; return v>=T.hrv.green?2:v>=T.hrv.yellow?1:0; }
-function scoreRHR(v) { if(!v) return null; return v<=T.rhr.green?2:v<=T.rhr.yellow?1:0; }
-function scoreSen(v) { if(!v) return null; return v>=T.sen.green?2:v>=T.sen.yellow?1:0; }
-function scoreBB(v)  { if(!v) return null; return v>=T.bb.green?2:v>=T.bb.yellow?1:0; }
+// ── STATUS REGENERACJI ────────────────────────────────────────────────
+// Używa bb_min ostatniego dnia + czas od ostatniego treningu
+function calcStatus(zdrowie, treningi) {
+  const sorted = [...zdrowie].sort((a,b)=>b.data.localeCompare(a.data));
+  // Szukaj najnowszego dnia z danymi
+  const latest = sorted[0];
+  // Użyj bb_min jako aktualnego stanu (po całym dniu / po treningu)
+  const bb = latest.bb_min > 5 ? latest.bb_min : latest.bb_max; // fallback jeśli bb_min=5 (brak danych)
 
-function statusInfo(score) {
-  if (score >= 7) return { emoji:'🟢', label:'Gotowy na ciężki wysiłek', color:'#4ade80' };
-  if (score >= 5) return { emoji:'🟡', label:'Umiarkowana gotowość', color:'#facc15' };
-  if (score >= 3) return { emoji:'🟠', label:'Oszczędzaj energię', color:'#fb923c' };
-  return            { emoji:'🔴', label:'Regeneracja priorytetem', color:'#f87171' };
+  // Czas od ostatniego treningu w godzinach
+  const lastT = treningi.sort((a,b)=>b.data.localeCompare(a.data))[0];
+  let hoursRest = null;
+  if(lastT) {
+    const msPerH = 3600000;
+    hoursRest = Math.round((Date.now() - new Date(lastT.data).getTime()) / msPerH);
+  }
+
+  const scores = [s(cHRV(latest.hrv)), s(cRHR(latest.rhr)), s(cSen(latest.sen_godz)), s(cBB(bb))].filter(x=>x!==null);
+  const rawScore = scores.length ? scores.reduce((a,b)=>a+b,0)/scores.length : 0;
+  // Bonus/malus za czas odpoczynku
+  let restBonus = 0;
+  if(hoursRest!==null) {
+    if(hoursRest >= 48) restBonus = 0.15;
+    else if(hoursRest >= 24) restBonus = 0;
+    else restBonus = -0.2;
+  }
+  const finalScore = Math.max(0, Math.min(1, rawScore/2 + restBonus));
+
+  let emoji, label, color;
+  if(finalScore >= 0.8)      { emoji='🟢'; label='Gotowy na ciężki wysiłek'; color='#4ade80'; }
+  else if(finalScore >= 0.55){ emoji='🟡'; label='Umiarkowana gotowość';      color='#facc15'; }
+  else if(finalScore >= 0.35){ emoji='🟠'; label='Oszczędzaj energię';        color='#fb923c'; }
+  else                       { emoji='🔴'; label='Regeneracja priorytetem';   color='#f87171'; }
+
+  return { emoji, label, color, latest, bb, hoursRest, rawScore: finalScore };
 }
 
-function statusComment(score, d) {
+function statusComment(st) {
+  const { latest, bb, hoursRest } = st;
   const parts = [];
-  if (d.hrv !== null && d.hrv < T.hrv.yellow) parts.push(`HRV na poziomie ${d.hrv} — poniżej Twojej normy`);
-  if (d.rhr !== null && d.rhr > T.rhr.yellow) parts.push(`RHR podwyższone (${d.rhr} bpm)`);
-  if (d.sen_godz !== null && d.sen_godz < T.sen.yellow) parts.push(`Krótki sen (${d.sen_godz}h)`);
-  if (d.bb_max !== null && d.bb_max < T.bb.yellow) parts.push(`Niskie Body Battery (${d.bb_max})`);
-  if (parts.length === 0) {
-    if (score >= 7) return 'Wszystkie wskaźniki w normie. Dobry moment na mocniejszy trening.';
-    return 'Parametry w porządku — trenuj zgodnie z planem.';
+  if(latest.hrv && latest.hrv < T.hrv.yellow) parts.push(`HRV ${latest.hrv} — poniżej normy`);
+  if(latest.rhr && latest.rhr > T.rhr.yellow) parts.push(`RHR podwyższone (${latest.rhr} bpm)`);
+  if(latest.sen_godz && latest.sen_godz < T.sen.yellow) parts.push(`Krótki sen (${latest.sen_godz.toFixed(1)}h)`);
+  if(bb && bb < T.bb.yellow) parts.push(`Niskie Body Battery (${bb})`);
+  if(hoursRest !== null && hoursRest < 20) parts.push(`Ostatni trening ${hoursRest}h temu — krótki odpoczynek`);
+  if(parts.length === 0) {
+    return st.rawScore >= 0.8
+      ? 'Wszystkie wskaźniki w normie. Dobry moment na mocniejszy trening.'
+      : 'Parametry w porządku — trenuj zgodnie z planem.';
   }
   return parts.join('. ') + '.';
 }
 
-function fmt(v, suf='', dec=0) {
-  if (v === null || v === undefined) return '<span style="color:#475569">—</span>';
-  return (dec ? (+v).toFixed(dec) : v) + suf;
+// ── INTENSYWNOŚĆ TRENINGU ─────────────────────────────────────────────
+function trainingIntensity(t) {
+  if(!t) return { label:'', color:'#2d3348', pct:0 };
+  const z3z4 = (t.z3_pct||0) + (t.z4_pct||0);
+  const z2   = t.z2_pct||0;
+  if(t.typ==='strength_training') return { label:'Siła',    color:'#a78bfa', pct:60 };
+  if(t.typ==='yoga')              return { label:'Regen',   color:'#34d399', pct:20 };
+  if(z3z4 >= 25)                  return { label:'Wysoka',  color:'#f87171', pct:90 };
+  if(z3z4 >= 10)                  return { label:'Średnia', color:'#facc15', pct:60 };
+  if(z2 >= 50)                    return { label:'Z2',      color:'#4ade80', pct:40 };
+  return                                  { label:'Niska',   color:'#60a5fa', pct:25 };
 }
 
-// Kolory dla wykresu
-const COLOR = { green:'#4ade80', yellow:'#facc15', red:'#f87171', dim:'#475569' };
-function chartColorHRV(v) { return COLOR[cHRV(v)]; }
-function chartColorRHR(v) { return COLOR[cRHR(v)]; }
+// ── HELPERS ───────────────────────────────────────────────────────────
+function fmt(v, suf='', dec=0) {
+  if(v===null||v===undefined) return '<span class="d">—</span>';
+  return (dec?(+v).toFixed(dec):v)+suf;
+}
+function clx(col) { return col==='green'?'g':col==='yellow'?'y':col==='red'?'r':'d'; }
 
-// Karuzel dots
-function initCarousel() {
-  const carousel = document.getElementById('carousel');
-  const tabsEl = document.querySelectorAll('.tab');
-  if (!carousel) return;
-  carousel.addEventListener('scroll', () => {
+// ── KARUZELA ─────────────────────────────────────────────────────────
+function initCarousel(id, tabsId) {
+  const carousel = document.getElementById(id);
+  const tabs = document.querySelectorAll(`#${tabsId} .tab`);
+  if(!carousel) return;
+  carousel.addEventListener('scroll', ()=>{
     const idx = Math.round(carousel.scrollLeft / carousel.offsetWidth);
-    tabsEl.forEach((t,i) => t.classList.toggle('active', i===idx));
-  }, { passive: true });
-  tabsEl.forEach((t,i) => t.addEventListener('click', () => {
-    carousel.scrollTo({ left: i * carousel.offsetWidth, behavior: 'smooth' });
+    tabs.forEach((t,i)=>t.classList.toggle('active', i===idx));
+  }, { passive:true });
+  tabs.forEach((t,i)=>t.addEventListener('click',()=>{
+    carousel.scrollTo({ left: i*carousel.offsetWidth, behavior:'smooth' });
   }));
 }
 
+// ── RENDER GŁÓWNY ─────────────────────────────────────────────────────
 function renderPage(data) {
   const zdrowie  = [...data.zdrowie].sort((a,b)=>b.data.localeCompare(a.data));
   const treningi = [...data.treningi].sort((a,b)=>b.data.localeCompare(a.data));
-  const latest   = zdrowie[0];
-  const last7    = zdrowie.slice(0,7);
 
-  // Status
-  const scores = [scoreHRV(latest.hrv), scoreRHR(latest.rhr), scoreSen(latest.sen_godz), scoreBB(latest.bb_max)].filter(x=>x!==null);
-  const totalScore = scores.reduce((a,b)=>a+b,0);
-  const maxScore   = scores.length * 2;
-  const normScore  = maxScore > 0 ? Math.round(totalScore / maxScore * 8) : 0;
-  const si = statusInfo(normScore);
-
-  // Treningi na mapę dat
-  const trainingByDate = {};
-  treningi.forEach(t => {
-    trainingByDate[t.data] = (trainingByDate[t.data]||[]).concat(icon(t.typ));
-  });
+  const st    = calcStatus(zdrowie, treningi);
+  const last7 = getLast7Days(zdrowie, treningi);
 
   document.getElementById('page').innerHTML = `
     <p class="meta">Ostatnia aktualizacja: ${data.ostatnia_aktualizacja}</p>
 
-    <!-- KARUZELA -->
+    <!-- KARUZELA GŁÓWNA -->
     <div class="carousel-wrap">
-      <div class="tabs" id="tabs">
-        <div class="tab active" data-i="0">Status</div>
-        <div class="tab" data-i="1">7 dni</div>
-        <div class="tab" data-i="2">Tabela</div>
+      <div class="tabs" id="tabs1">
+        <div class="tab active">Status</div>
+        <div class="tab">7 dni</div>
+        <div class="tab">Zdrowie</div>
       </div>
-      <div class="carousel" id="carousel">
+      <div class="carousel" id="car1">
 
-        <!-- Slide 1: Status -->
+        <!-- SLIDE 1: STATUS -->
         <div class="carousel-slide">
-          <div class="section-title">Status dziś</div>
+          <div class="section-title">Gotowość dziś</div>
           <div class="status-top">
-            <div class="status-emoji">${si.emoji}</div>
-            <div class="status-text">
-              <div class="label">Gotowość</div>
-              <div class="value" style="color:${si.color}">${si.label}</div>
+            <div class="status-emoji">${st.emoji}</div>
+            <div>
+              <div class="status-label">Regeneracja</div>
+              <div class="status-value" style="color:${st.color}">${st.label}</div>
             </div>
           </div>
-          <p class="status-comment">${statusComment(normScore, latest)}</p>
-          <div class="metrics-pills">
-            <div class="pill ${cHRV(latest.hrv)}">
-              <span class="p-label">HRV</span>
-              <span class="p-value">${latest.hrv ?? '—'}</span>
+          <p class="status-comment">${statusComment(st)}</p>
+          <div class="pills">
+            <div class="pill">
+              <div class="p-label">HRV</div>
+              <div class="p-value ${clx(cHRV(st.latest.hrv))}">${st.latest.hrv??'—'}</div>
             </div>
-            <div class="pill ${cRHR(latest.rhr)}">
-              <span class="p-label">RHR</span>
-              <span class="p-value">${latest.rhr ?? '—'} bpm</span>
+            <div class="pill">
+              <div class="p-label">RHR</div>
+              <div class="p-value ${clx(cRHR(st.latest.rhr))}">${st.latest.rhr??'—'} bpm</div>
             </div>
-            <div class="pill ${cSen(latest.sen_godz)}">
-              <span class="p-label">Sen</span>
-              <span class="p-value">${latest.sen_godz ? latest.sen_godz.toFixed(1)+'h' : '—'}</span>
+            <div class="pill">
+              <div class="p-label">Sen</div>
+              <div class="p-value ${clx(cSen(st.latest.sen_godz))}">${st.latest.sen_godz?st.latest.sen_godz.toFixed(1)+'h':'—'}</div>
             </div>
-            <div class="pill ${cBB(latest.bb_max)}">
-              <span class="p-label">Body Battery</span>
-              <span class="p-value">${latest.bb_max ?? '—'}</span>
+            <div class="pill">
+              <div class="p-label">Body Battery</div>
+              <div class="p-value ${clx(cBB(st.bb))}">${st.bb??'—'}</div>
             </div>
           </div>
         </div>
 
-        <!-- Slide 2: 7 dni -->
+        <!-- SLIDE 2: 7 DNI -->
         <div class="carousel-slide">
           <div class="section-title">Ostatnie 7 dni</div>
-          <table class="week-table">
-            <thead><tr>
-              <th>Data</th><th>HRV</th><th>RHR</th><th>Sen</th><th>BB</th><th>Trening</th>
-            </tr></thead>
-            <tbody>
-              ${last7.map(r=>`<tr>
-                <td>${r.data.slice(5)}</td>
-                <td class="wt-${cHRV(r.hrv)}">${r.hrv??'—'}</td>
-                <td class="wt-${cRHR(r.rhr)}">${r.rhr??'—'}</td>
-                <td class="wt-${cSen(r.sen_godz)}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
-                <td class="wt-${cBB(r.bb_max)}">${r.bb_max??'—'}</td>
-                <td>${(trainingByDate[r.data]||[]).join('')||'<span style="color:#2d3348">·</span>'}</td>
-              </tr>`).join('')}
-            </tbody>
-          </table>
+          ${last7.map(day => {
+            const t = day.training;
+            const intens = trainingIntensity(t);
+            const isRest = !t;
+            return `
+            <div class="week-row">
+              <div class="week-date">${day.date.slice(5)}</div>
+              <div class="week-icon">${t ? icon(t.typ) : '😴'}</div>
+              <div class="week-info">
+                <div class="wi-name">${t ? typ(t.typ) : 'Regeneracja'}</div>
+                <div class="wi-sub">${t ? [
+                  t.dystans_km ? t.dystans_km+'km' : null,
+                  t.czas_min   ? Math.round(t.czas_min)+'min' : null,
+                  t.tempo      ? t.tempo+'/km' : null,
+                ].filter(Boolean).join(' · ') : ''}</div>
+              </div>
+              ${t ? `<div class="week-intensity">
+                <div class="intensity-label">${intens.label}</div>
+                <div class="intensity-bar" style="background:${intens.color};width:${intens.pct}%"></div>
+              </div>` : ''}
+            </div>`;
+          }).join('')}
         </div>
 
-        <!-- Slide 3: Pełna tabela -->
+        <!-- SLIDE 3: TABELA ZDROWIA -->
         <div class="carousel-slide">
           <div class="section-title">Dane zdrowotne</div>
           <table class="health-table">
@@ -487,164 +431,213 @@ function renderPage(data) {
             <tbody>
               ${zdrowie.map(r=>`<tr>
                 <td>${r.data.slice(5)}</td>
-                <td class="${cHRV(r.hrv)[0]}">${r.hrv??'—'}</td>
-                <td class="${cRHR(r.rhr)[0]}">${r.rhr??'—'}</td>
-                <td class="${cBB(r.bb_max)[0]}">${r.bb_max??'—'}</td>
-                <td class="${cSen(r.sen_godz)[0]}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
+                <td class="${clx(cHRV(r.hrv))}">${r.hrv??'—'}</td>
+                <td class="${clx(cRHR(r.rhr))}">${r.rhr??'—'}</td>
+                <td class="${clx(cBB(r.bb_max))}">${r.bb_max??'—'}</td>
+                <td class="${clx(cSen(r.sen_godz))}">${r.sen_godz?r.sen_godz.toFixed(1)+'h':'—'}</td>
                 <td>${r.jakosc_snu??'—'}</td>
               </tr>`).join('')}
             </tbody>
           </table>
         </div>
-
       </div>
     </div>
 
     <!-- TRENINGI -->
     <div class="card">
       <div class="section-title">Treningi</div>
-      <div id="treningi-list">
-        ${treningi.map((t,i)=>{
-          const details = [
-            t.dystans_km ? `<div class="detail-item"><div class="d-label">Dystans</div><div class="d-value">${t.dystans_km} km</div></div>` : '',
-            t.czas_min   ? `<div class="detail-item"><div class="d-label">Czas</div><div class="d-value">${Math.round(t.czas_min)} min</div></div>` : '',
-            t.tempo      ? `<div class="detail-item"><div class="d-label">Tempo</div><div class="d-value">${t.tempo}/km</div></div>` : '',
-            t.hr_avg     ? `<div class="detail-item"><div class="d-label">HR avg</div><div class="d-value">${t.hr_avg} bpm</div></div>` : '',
-            t.hr_max     ? `<div class="detail-item"><div class="d-label">HR max</div><div class="d-value">${t.hr_max} bpm</div></div>` : '',
-            t.z2_pct     ? `<div class="detail-item"><div class="d-label">Strefa 2</div><div class="d-value">${t.z2_pct}%</div></div>` : '',
-            t.z3_pct     ? `<div class="detail-item"><div class="d-label">Strefa 3</div><div class="d-value">${t.z3_pct}%</div></div>` : '',
-            t.vo2max     ? `<div class="detail-item"><div class="d-label">VO2max est.</div><div class="d-value">${(t.vo2max/10).toFixed(1)}</div></div>` : '',
-          ].filter(Boolean).join('');
-          const summary = [
-            t.dystans_km ? t.dystans_km+'km' : null,
-            t.czas_min   ? Math.round(t.czas_min)+'min' : null,
-            t.tempo      ? t.tempo+'/km' : null,
-          ].filter(Boolean).join(' · ');
-          return `
-          <div class="trening-item" id="tr-${i}">
-            <div class="trening-header" onclick="toggleTrening(${i})">
-              <div class="trening-icon">${icon(t.typ)}</div>
-              <div class="trening-main">
-                <div class="typ">${typ(t.typ)}</div>
-                <div class="sub">${summary || 'brak danych'}</div>
-              </div>
-              <div class="trening-right">${t.data.slice(5)}</div>
-              <div class="expand-arrow">▾</div>
+      ${treningi.map((t,i)=>{
+        const summary = [
+          t.dystans_km ? t.dystans_km+'km' : null,
+          t.czas_min   ? Math.round(t.czas_min)+'min' : null,
+          t.tempo      ? t.tempo+'/km' : null,
+        ].filter(Boolean).join(' · ');
+        const details = [
+          t.hr_avg    ? ['HR avg', t.hr_avg+' bpm'] : null,
+          t.hr_max    ? ['HR max', t.hr_max+' bpm'] : null,
+          t.z2_pct    ? ['Strefa 2', t.z2_pct+'%'] : null,
+          t.z3_pct    ? ['Strefa 3', t.z3_pct+'%'] : null,
+          t.tempo     ? ['Tempo', t.tempo+'/km'] : null,
+          t.vo2max    ? ['VO2max', t.vo2max] : null,
+          t.body_battery_delta && t.body_battery_delta!=='UNKNOWN' ? ['BB efekt', t.body_battery_delta] : null,
+        ].filter(Boolean);
+        return `
+        <div class="trening-item" id="tr-${i}">
+          <div class="trening-header" onclick="toggleT(${i})">
+            <div class="tr-icon">${icon(t.typ)}</div>
+            <div class="tr-main">
+              <div class="typ">${typ(t.typ)}</div>
+              <div class="sub">${summary||'—'}</div>
             </div>
-            <div class="trening-details">${details}</div>
-          </div>`;
-        }).join('')}
-      </div>
+            <div class="tr-date">${t.data.slice(5)}</div>
+            <div class="arrow">▾</div>
+          </div>
+          <div class="tr-details">
+            ${details.map(([l,v])=>`<div class="d-item"><div class="d-label">${l}</div><div class="d-value">${v}</div></div>`).join('')}
+          </div>
+        </div>`;
+      }).join('')}
     </div>
 
-    <!-- WYKRES -->
+    <!-- WYKRESY -->
     <div class="card">
-      <div class="section-title">HRV & RHR — trend</div>
-      <div class="chart-wrap"><canvas id="chart"></canvas></div>
+      <div class="section-title">Wykresy</div>
+      <div class="chart-tabs">
+        <div class="chart-tab active" onclick="switchChart(0)">Kondycja</div>
+        <div class="chart-tab" onclick="switchChart(1)">Progres</div>
+      </div>
+      <div class="chart-panel active" id="cp0">
+        <div class="chart-wrap"><canvas id="chartKondycja"></canvas></div>
+      </div>
+      <div class="chart-panel" id="cp1">
+        <div class="chart-wrap"><canvas id="chartProgres"></canvas></div>
+      </div>
     </div>
   `;
 
-  initCarousel();
-  renderChart(zdrowie);
+  initCarousel('car1','tabs1');
+  renderChartKondycja(zdrowie);
+  renderChartProgres(treningi);
 }
 
-function toggleTrening(i) {
-  document.getElementById('tr-'+i).classList.toggle('open');
+// ── 7 DNI — mapowanie dat na treningi ────────────────────────────────
+function getLast7Days(zdrowie, treningi) {
+  const days = [];
+  const trainingMap = {};
+  treningi.forEach(t => { trainingMap[t.data] = t; });
+  const sorted = [...zdrowie].sort((a,b)=>b.data.localeCompare(a.data)).slice(0,7);
+  sorted.forEach(z => {
+    days.push({ date: z.data, health: z, training: trainingMap[z.data] || null });
+  });
+  return days;
 }
 
-function renderChart(zdrowie) {
+// ── TOGGLE TRENINGI ───────────────────────────────────────────────────
+function toggleT(i) { document.getElementById('tr-'+i).classList.toggle('open'); }
+
+// ── CHART SWITCH ──────────────────────────────────────────────────────
+let activeChart = 0;
+function switchChart(idx) {
+  document.querySelectorAll('.chart-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  document.querySelectorAll('.chart-panel').forEach((p,i)=>p.classList.toggle('active',i===idx));
+  activeChart = idx;
+}
+
+// ── CHART 1: KONDYCJA ─────────────────────────────────────────────────
+function renderChartKondycja(zdrowie) {
   const sorted = [...zdrowie].sort((a,b)=>a.data.localeCompare(b.data));
-  const labels = sorted.map(r=>r.data.slice(5));
-  const hrv    = sorted.map(r=>r.hrv);
-  const rhr    = sorted.map(r=>r.rhr);
+  const labels  = sorted.map(r=>r.data.slice(5));
+  const scores  = sorted.map(r=>kondycjaScore(r.hrv, r.rhr, r.bb_max));
+  const colors  = scores.map(v=>{
+    if(v===null) return COL.dim;
+    if(v>=70) return COL.green;
+    if(v>=45) return COL.yellow;
+    return COL.red;
+  });
 
-  new Chart(document.getElementById('chart'), {
-    type: 'line',
+  new Chart(document.getElementById('chartKondycja'), {
+    type: 'bar',
     data: {
       labels,
-      datasets: [
-        {
-          label: 'HRV',
-          data: hrv,
-          borderColor: '#4ade80',
-          backgroundColor: 'rgba(74,222,128,0.06)',
-          tension: 0.3,
-          spanGaps: true,
-          pointRadius: 5,
-          pointBackgroundColor: hrv.map(v => COLOR[cHRV(v)]),
-          pointBorderColor: hrv.map(v => COLOR[cHRV(v)]),
-          segment: {
-            borderColor: ctx => {
-              const v = hrv[ctx.p1DataIndex];
-              return COLOR[cHRV(v)] || '#4ade80';
-            }
-          },
-        },
-        {
-          label: 'RHR',
-          data: rhr,
-          borderColor: '#60a5fa',
-          backgroundColor: 'rgba(96,165,250,0.06)',
-          tension: 0.3,
-          spanGaps: true,
-          pointRadius: 5,
-          pointBackgroundColor: rhr.map(v => COLOR[cRHR(v)]),
-          pointBorderColor: rhr.map(v => COLOR[cRHR(v)]),
-          segment: {
-            borderColor: ctx => {
-              const v = rhr[ctx.p1DataIndex];
-              return COLOR[cRHR(v)] || '#60a5fa';
-            }
-          },
-          yAxisID: 'rhr',
-        }
-      ]
+      datasets: [{
+        label: 'Kondycja (0–100)',
+        data: scores,
+        backgroundColor: colors,
+        borderRadius: 6,
+      }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode:'index', intersect:false },
-      plugins: {
-        legend: { labels: { color:'#94a3b8', font:{ size:11 } } }
-      },
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{ display:false } },
       scales: {
-        x:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } },
-        y:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' },
-               title:{ display:true, text:'HRV', color:'#4ade80', font:{size:10} } },
-        rhr: { position:'right', ticks:{ color:'#64748b', font:{size:10} },
-               grid:{ drawOnChartArea:false },
-               title:{ display:true, text:'RHR', color:'#60a5fa', font:{size:10} } }
+        x: { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } },
+        y: { min:0, max:100, ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } }
       }
     }
   });
 }
 
-function showToast(msg, duration=3000) {
+// ── CHART 2: PROGRES ──────────────────────────────────────────────────
+function renderChartProgres(treningi) {
+  // Tylko biegi z danymi
+  const runs = treningi
+    .filter(t=>t.typ==='running' && t.czas_min)
+    .sort((a,b)=>a.data.localeCompare(b.data));
+
+  const labels   = runs.map(r=>r.data.slice(5));
+  const volumen  = runs.map(r=>Math.round(r.czas_min));
+  const vo2      = runs.map(r=>r.vo2max||null);
+  const hasVo2   = vo2.some(v=>v!==null);
+
+  const datasets = [{
+    type: 'bar',
+    label: 'Czas biegu (min)',
+    data: volumen,
+    backgroundColor: 'rgba(96,165,250,0.4)',
+    borderRadius: 5,
+    yAxisID: 'y',
+  }];
+
+  if(hasVo2) {
+    datasets.push({
+      type: 'line',
+      label: 'VO2max',
+      data: vo2,
+      borderColor: '#4ade80',
+      backgroundColor: 'rgba(74,222,128,0.1)',
+      pointBackgroundColor: '#4ade80',
+      tension: 0.3,
+      spanGaps: true,
+      pointRadius: 4,
+      yAxisID: 'vo2',
+    });
+  }
+
+  new Chart(document.getElementById('chartProgres'), {
+    data: { labels, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      interaction: { mode:'index', intersect:false },
+      plugins: { legend:{ labels:{ color:'#94a3b8', font:{size:10} } } },
+      scales: {
+        x:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' } },
+        y:   { ticks:{ color:'#64748b', font:{size:10} }, grid:{ color:'#2d3348' },
+               title:{ display:true, text:'min', color:'#60a5fa', font:{size:10} } },
+        vo2: { position:'right', ticks:{ color:'#64748b', font:{size:10} },
+               grid:{ drawOnChartArea:false },
+               title:{ display:true, text:'VO2max', color:'#4ade80', font:{size:10} } }
+      }
+    }
+  });
+}
+
+// ── TOAST ─────────────────────────────────────────────────────────────
+function showToast(msg, ms=3000) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), duration);
+  setTimeout(()=>t.classList.remove('show'), ms);
 }
 
+// ── REFRESH ───────────────────────────────────────────────────────────
 async function triggerRefresh() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('loading');
-  btn.disabled = true;
   try {
     await fetch(REFRESH, { method:'GET', mode:'cors' });
-    showToast('⏳ Skrypt odpalony — dane odświeżą się za ~1 minutę');
+    showToast('⏳ Skrypt odpalony — dane odświeżą się za ~1 min');
   } catch(e) {
     showToast('❌ Błąd połączenia z n8n');
   }
-  setTimeout(()=>{ btn.classList.remove('loading'); btn.disabled=false; }, 3000);
+  setTimeout(()=>btn.classList.remove('loading'), 3000);
 }
 
+// ── LOAD ──────────────────────────────────────────────────────────────
 async function load() {
   try {
     const res = await fetch(API);
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    renderPage(data);
+    if(!res.ok) throw new Error();
+    renderPage(await res.json());
   } catch(e) {
     document.getElementById('page').innerHTML = '<div class="loading">Błąd ładowania danych</div>';
   }
